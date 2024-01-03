@@ -60,6 +60,9 @@ const NavBar = () => {
       >
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
       </NavLink>
+
+      <NavLink
+        to="/mp3/upload">Upload MP3</NavLink>
     </>
   );
   const loggedOutIcons = (
@@ -79,6 +82,7 @@ const NavBar = () => {
         <i className="fas fa-user-plus"></i>Sign up
       </NavLink>
     </>
+   
   );
 
   return (
