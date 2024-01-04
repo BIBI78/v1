@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -7,40 +8,58 @@ import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
 
-import Asset from "../../components/Asset";
-import Upload from "../../assets/upload.png";
-
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
 
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
-import { useRedirect } from "../../hooks/useRedirect";
 
-function Mp3CreateForm() {
-  useRedirect("loggedOut");
+function Mp3EditForm() {
   const [errors, setErrors] = useState({});
 
-  const [mp3Info, setMp3Info] = useState({
+  const [mp3Data, setMp3Data] = useState({
     title: "",
     artist: "",
     // Add more fields as needed
+    image: "",
   });
-  const { title, artist } = mp3Info;
+  const { title, artist, image } = mp3Data;
 
   const imageInput = useRef(null);
   const history = useHistory();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const handleMount = async () => {
+      try {
+        const { data } = await axiosReq.get(`/mp3/${id}/`);
+        const { title, artist, image, is_owner } = data;
+
+        is_owner ? setMp3Data({ title, artist, image }) : history.push("/");
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    handleMount();
+  }, [history, id]);
 
   const handleChange = (event) => {
-    setMp3Info({
-      ...mp3Info,
+    setMp3Data({
+      ...mp3Data,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleChangeImage = (event) => {
-    // Handle image changes if needed
+    if (event.target.files.length) {
+      URL.revokeObjectURL(image);
+      setMp3Data({
+        ...mp3Data,
+        image: URL.createObjectURL(event.target.files[0]),
+      });
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -51,11 +70,13 @@ function Mp3CreateForm() {
     formData.append("artist", artist);
     // Append more fields as needed
 
+    if (imageInput?.current?.files[0]) {
+      formData.append("image", imageInput.current.files[0]);
+    }
+
     try {
-      const { data } = await axiosReq.post("/mp3/create", formData);
-      // Handle the response from the server (e.g., show success message)
-      console.log('MP3 created successfully:', data);
-      // Redirect to the newly created MP3's page or another page as needed
+      await axiosReq.put(`/mp3/${id}/`, formData);
+      history.push(`/mp3/${id}`);
     } catch (err) {
       console.log(err);
       if (err.response?.status !== 401) {
@@ -103,7 +124,7 @@ function Mp3CreateForm() {
         Cancel
       </Button>
       <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
-        Create MP3
+        Save
       </Button>
     </div>
   );
@@ -115,8 +136,33 @@ function Mp3CreateForm() {
           <Container
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
-            {/* Image upload section (similar to PostCreateForm) */}
-            {textFields}
+            <Form.Group className="text-center">
+              <figure>
+                <Image className={appStyles.Image} src={image} rounded />
+              </figure>
+              <div>
+                <Form.Label
+                  className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
+                  htmlFor="image-upload"
+                >
+                  Change the image
+                </Form.Label>
+              </div>
+
+              <Form.File
+                id="image-upload"
+                accept="image/*"
+                onChange={handleChangeImage}
+                ref={imageInput}
+              />
+            </Form.Group>
+            {errors?.image?.map((message, idx) => (
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
+            ))}
+
+            <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
@@ -127,4 +173,4 @@ function Mp3CreateForm() {
   );
 }
 
-export default Mp3CreateForm;
+export default Mp3EditForm;
