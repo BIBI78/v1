@@ -14,7 +14,8 @@ import ProfilePage from "./pages/profiles/ProfilePage";
 import UsernameForm from "./pages/profiles/UsernameForm";
 import UserPasswordForm from "./pages/profiles/UserPasswordForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
-import Mp3Upload from "./pages/mp3/Mp3Upload";
+import Mp3Post from "./pages/mp3/Mp3";
+import Mp3CreateForm from "./pages/mp3/Mp3CreateForm";
 
 function App() {
   const currentUser = useCurrentUser();
@@ -58,6 +59,7 @@ function App() {
           <Route exact path="/posts/:id" render={() => <PostPage />} />
           <Route exact path="/posts/:id/edit" render={() => <PostEditForm />} />
           <Route exact path="/profiles/:id" render={() => <ProfilePage />} />
+           <Route exact path="/mp3/create" render={() => <Mp3CreateForm />} />
           <Route
             exact
             path="/profiles/:id/edit/username"
@@ -73,7 +75,7 @@ function App() {
             path="/profiles/:id/edit"
             render={() => <ProfileEditForm />}
           />
-          <Route exact path="/mp3/upload" render={() => <Mp3Upload />} />
+          <Route exact path="/mp3/upload" render={() => <Mp3Post />} />
 
           <Route render={() => <p>Page not found!</p>} />
         </Switch>

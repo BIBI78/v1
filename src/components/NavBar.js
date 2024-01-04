@@ -39,11 +39,11 @@ const NavBar = () => {
 
 
   //
-   const mp3UploadIcon = (
+   const mp3Icon = (
     <NavLink
       className={styles.NavLink}
       activeClassName={styles.Active}
-      to="/mp3/upload" // Update the route to the correct path for MP3 upload
+      to="/mp3/create" // Update the route to the correct path for MP3 upload
     >
       <i className="far fa-file-audio"></i>Upload MP3
     </NavLink>
@@ -113,7 +113,7 @@ const NavBar = () => {
           </Navbar.Brand>
         </NavLink>
         {currentUser && addPostIcon}
-        {mp3UploadIcon}
+        {mp3Icon}
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
