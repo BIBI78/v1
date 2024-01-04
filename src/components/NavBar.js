@@ -35,6 +35,22 @@ const NavBar = () => {
       <i className="far fa-plus-square"></i>Add post
     </NavLink>
   );
+  
+
+
+  //
+   const mp3UploadIcon = (
+    <NavLink
+      className={styles.NavLink}
+      activeClassName={styles.Active}
+      to="/mp3/upload" // Update the route to the correct path for MP3 upload
+    >
+      <i className="far fa-file-audio"></i>Upload MP3
+    </NavLink>
+  );
+  //
+
+
   const loggedInIcons = (
     <>
       <NavLink
@@ -61,8 +77,6 @@ const NavBar = () => {
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
       </NavLink>
 
-      <NavLink
-        to="/mp3/upload">Upload MP3</NavLink>
     </>
   );
   const loggedOutIcons = (
@@ -99,6 +113,7 @@ const NavBar = () => {
           </Navbar.Brand>
         </NavLink>
         {currentUser && addPostIcon}
+        {mp3UploadIcon}
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
