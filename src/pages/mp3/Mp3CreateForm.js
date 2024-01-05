@@ -5,10 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
-import Image from "react-bootstrap/Image";
+// import Image from "react-bootstrap/Image";
 
-import Asset from "../../components/Asset";
-import Upload from "../../assets/upload.png";
+// import Asset from "../../components/Asset";
+// import Upload from "../../assets/upload.png";
 
 import styles from "../../styles/Mp3CreateEditForm.module.css";
 import appStyles from "../../App.module.css";
@@ -29,7 +29,7 @@ function Mp3CreateForm() {
   });
   const { title, artist } = mp3Info;
 
-  const imageInput = useRef(null);
+  // const imageInput = useRef(null);
   const history = useHistory();
 
   const handleChange = (event) => {
@@ -39,9 +39,9 @@ function Mp3CreateForm() {
     });
   };
 
-  const handleChangeImage = (event) => {
-    // Handle image changes if needed
-  };
+  // const handleChangeImage = (event) => {
+  //   // Handle image changes if needed
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
