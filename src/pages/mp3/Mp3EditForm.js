@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
-import Image from "react-bootstrap/Image";
-
 import styles from "../../styles/Mp3CreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
-
 import { useHistory, useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 
@@ -20,23 +16,22 @@ function Mp3EditForm() {
 
   const [mp3Data, setMp3Data] = useState({
     title: "",
-    artist: "",
-    // Add more fields as needed
-    image: "",
+    content: "",
+    mp3: "",
   });
-  const { title, artist, image } = mp3Data;
+  const { title, content, mp3 } = mp3Data;
 
-  const imageInput = useRef(null);
+  const mp3Input = useRef(null);
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
     const handleMount = async () => {
       try {
-        const { data } = await axiosReq.get(`/mp3/${id}/`);
-        const { title, artist, image, is_owner } = data;
+        const { data } = await axiosReq.get(`/mp3s/${id}/`);
+        const { title, content, mp3, is_owner } = data;
 
-        is_owner ? setMp3Data({ title, artist, image }) : history.push("/");
+        is_owner ? setMp3Data({ title, content, mp3 }) : history.push("/");
       } catch (err) {
         console.log(err);
       }
@@ -52,12 +47,11 @@ function Mp3EditForm() {
     });
   };
 
-  const handleChangeImage = (event) => {
+  const handleChangeMp3 = (event) => {
     if (event.target.files.length) {
-      URL.revokeObjectURL(image);
       setMp3Data({
         ...mp3Data,
-        image: URL.createObjectURL(event.target.files[0]),
+        mp3: URL.createObjectURL(event.target.files[0]),
       });
     }
   };
@@ -67,16 +61,15 @@ function Mp3EditForm() {
     const formData = new FormData();
 
     formData.append("title", title);
-    formData.append("artist", artist);
-    // Append more fields as needed
+    formData.append("content", content);
 
-    if (imageInput?.current?.files[0]) {
-      formData.append("image", imageInput.current.files[0]);
+    if (mp3Input?.current?.files[0]) {
+      formData.append("mp3", mp3Input.current.files[0]);
     }
 
     try {
-      await axiosReq.put(`/mp3/${id}/`, formData);
-      history.push(`/mp3/${id}`);
+      await axiosReq.put(`/mp3s/${id}/`, formData);
+      history.push(`/mp3s/${id}`);
     } catch (err) {
       console.log(err);
       if (err.response?.status !== 401) {
@@ -103,15 +96,16 @@ function Mp3EditForm() {
       ))}
 
       <Form.Group>
-        <Form.Label>Artist</Form.Label>
+        <Form.Label>Content</Form.Label>
         <Form.Control
-          type="text"
-          name="artist"
-          value={artist}
+          as="textarea"
+          rows={6}
+          name="content"
+          value={content}
           onChange={handleChange}
         />
       </Form.Group>
-      {errors?.artist?.map((message, idx) => (
+      {errors?.content?.map((message, idx) => (
         <Alert variant="warning" key={idx}>
           {message}
         </Alert>
@@ -137,26 +131,28 @@ function Mp3EditForm() {
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
             <Form.Group className="text-center">
-              <figure>
-                <Image className={appStyles.Image} src={image} rounded />
-              </figure>
-              <div>
+              {mp3 ? (
+                <audio controls>
+                  <source src={mp3} type="audio/mp3" />
+                  Your browser does not support the audio tag.
+                </audio>
+              ) : (
                 <Form.Label
-                  className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
-                  htmlFor="image-upload"
+                  className="d-flex justify-content-center"
+                  htmlFor="mp3-upload"
                 >
-                  Change the image
+                  Choose an MP3 file
                 </Form.Label>
-              </div>
+              )}
 
               <Form.File
-                id="image-upload"
-                accept="image/*"
-                onChange={handleChangeImage}
-                ref={imageInput}
+                id="mp3-upload"
+                accept="audio/*"
+                onChange={handleChangeMp3}
+                ref={mp3Input}
               />
             </Form.Group>
-            {errors?.image?.map((message, idx) => (
+            {errors?.mp3?.map((message, idx) => (
               <Alert variant="warning" key={idx}>
                 {message}
               </Alert>
@@ -174,3 +170,4 @@ function Mp3EditForm() {
 }
 
 export default Mp3EditForm;
+

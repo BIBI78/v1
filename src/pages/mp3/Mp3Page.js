@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import appStyles from "../../App.module.css";
 import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
-import Mp3 from "./Mp3";  // Adjust the import as per your actual file structure
+import Mp3 from "./Mp3";
 import Comment from "../comments/Comment";
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
@@ -25,8 +25,8 @@ function Mp3Page() {
     const handleMount = async () => {
       try {
         const [{ data: mp3 }, { data: comments }] = await Promise.all([
-          axiosReq.get(`/mp3/${id}/`),  // Adjust the API endpoint as per your actual API
-          axiosReq.get(`/comments/?mp3=${id}`),  // Adjust the API endpoint as per your actual API
+          axiosReq.get(`/mp3s/${id}/`),
+          axiosReq.get(`/comments/?mp3=${id}`),
         ]);
         setMp3({ results: [mp3] });
         setComments(comments);
@@ -84,3 +84,4 @@ function Mp3Page() {
 }
 
 export default Mp3Page;
+

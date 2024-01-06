@@ -3,10 +3,10 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import Mp3 from "./Mp3";  // Adjust the import as per your actual file structure
+import Mp3 from "./Mp3";
 import Asset from "../../components/Asset";
 import appStyles from "../../App.module.css";
-import styles from "../../styles/PostsPage.module.css";
+import styles from "../../styles/Mp3sPage.module.css";
 import { useLocation } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import NoResults from "../../assets/no-results.png";
@@ -56,7 +56,7 @@ function Mp3sPage({ message, filter = "" }) {
             onChange={(event) => setQuery(event.target.value)}
             type="text"
             className="mr-sm-2"
-            placeholder="Search mp3s"
+            placeholder="Search MP3s"
           />
         </Form>
 
