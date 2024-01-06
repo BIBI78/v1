@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/Post.module.css";
+import styles from "../../styles/Mp3.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
@@ -7,7 +7,7 @@ import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
 
-const Mp3Post = (props) => {
+const Mp3 = (props) => {
   const {
     id,
     owner,
@@ -18,10 +18,10 @@ const Mp3Post = (props) => {
     like_id,
     title,
     content,
-    image,
+    mp3,
     updated_at,
-    postPage,
-    setMp3Posts, // Assuming you have a function to update MP3 posts
+    mp3Page,
+    setMp3s,
   } = props;
 
   const currentUser = useCurrentUser();
@@ -29,13 +29,12 @@ const Mp3Post = (props) => {
   const history = useHistory();
 
   const handleEdit = () => {
-    // Handle edit logic as needed for MP3 posts
+    history.push(`/mp3s/${id}/edit`);
   };
 
   const handleDelete = async () => {
     try {
-      // Handle delete logic as needed for MP3 posts
-      await axiosRes.delete(`/mp3/${id}/`);
+      await axiosRes.delete(`/mp3s/${id}/`);
       history.goBack();
     } catch (err) {
       console.log(err);
@@ -44,14 +43,13 @@ const Mp3Post = (props) => {
 
   const handleLike = async () => {
     try {
-      // Handle like logic as needed for MP3 posts
-      const { data } = await axiosRes.post("/mp3/likes/", { mp3: id });
-      setMp3Posts((prevMp3Posts) => ({
-        ...prevMp3Posts,
-        results: prevMp3Posts.results.map((mp3Post) => {
-          return mp3Post.id === id
-            ? { ...mp3Post, likes_count: mp3Post.likes_count + 1, like_id: data.id }
-            : mp3Post;
+      const { data } = await axiosRes.post("/likes/", { mp3: id });
+      setMp3s((prevMp3s) => ({
+        ...prevMp3s,
+        results: prevMp3s.results.map((mp3) => {
+          return mp3.id === id
+            ? { ...mp3, likes_count: mp3.likes_count + 1, like_id: data.id }
+            : mp3;
         }),
       }));
     } catch (err) {
@@ -61,14 +59,13 @@ const Mp3Post = (props) => {
 
   const handleUnlike = async () => {
     try {
-      // Handle unlike logic as needed for MP3 posts
-      await axiosRes.delete(`/mp3/likes/${like_id}/`);
-      setMp3Posts((prevMp3Posts) => ({
-        ...prevMp3Posts,
-        results: prevMp3Posts.results.map((mp3Post) => {
-          return mp3Post.id === id
-            ? { ...mp3Post, likes_count: mp3Post.likes_count - 1, like_id: null }
-            : mp3Post;
+      await axiosRes.delete(`/likes/${like_id}/`);
+      setMp3s((prevMp3s) => ({
+        ...prevMp3s,
+        results: prevMp3s.results.map((mp3) => {
+          return mp3.id === id
+            ? { ...mp3, likes_count: mp3.likes_count - 1, like_id: null }
+            : mp3;
         }),
       }));
     } catch (err) {
@@ -77,7 +74,7 @@ const Mp3Post = (props) => {
   };
 
   return (
-    <Card className={styles.Post}>
+    <Card className={styles.Mp3}>
       <Card.Body>
         <Media className="align-items-center justify-content-between">
           <Link to={`/profiles/${profile_id}`}>
@@ -86,7 +83,7 @@ const Mp3Post = (props) => {
           </Link>
           <div className="d-flex align-items-center">
             <span>{updated_at}</span>
-            {is_owner && postPage && (
+            {is_owner && mp3Page && (
               <MoreDropdown
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
@@ -95,17 +92,26 @@ const Mp3Post = (props) => {
           </div>
         </Media>
       </Card.Body>
-      <Link to={`/mp3/${id}`}>
-        <Card.Img src={image} alt={title} />
+      <Link to={`/mp3s/${id}`}>
+        {/* Assuming there is an image associated with the mp3 */}
+        {/* <Card.Img src={image} alt={title} /> */}
       </Link>
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}
-        <div className={styles.PostBar}>
+        {mp3 && (
+          <div>
+            <audio controls>
+              <source src={mp3} type="audio/mp3" />
+              Your browser does not support the audio tag.
+            </audio>
+          </div>
+        )}
+        <div className={styles.Mp3Bar}>
           {is_owner ? (
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>You can't like your own MP3 post!</Tooltip>}
+              overlay={<Tooltip>You can't like your own mp3!</Tooltip>}
             >
               <i className="far fa-heart" />
             </OverlayTrigger>
@@ -120,13 +126,13 @@ const Mp3Post = (props) => {
           ) : (
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>Log in to like MP3 posts!</Tooltip>}
+              overlay={<Tooltip>Log in to like mp3s!</Tooltip>}
             >
               <i className="far fa-heart" />
             </OverlayTrigger>
           )}
           {likes_count}
-          <Link to={`/mp3/${id}`}>
+          <Link to={`/mp3s/${id}`}>
             <i className="far fa-comments" />
           </Link>
           {comments_count}
@@ -136,4 +142,4 @@ const Mp3Post = (props) => {
   );
 };
 
-export default Mp3Post;
+export default Mp3;
