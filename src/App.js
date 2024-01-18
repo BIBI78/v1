@@ -59,7 +59,8 @@ function App() {
           <Route exact path="/posts/:id" render={() => <PostPage />} />
           <Route exact path="/posts/:id/edit" render={() => <PostEditForm />} />
           <Route exact path="/profiles/:id" render={() => <ProfilePage />} />
-           <Route exact path="/mp3/create" render={() => <Mp3CreateForm />} />
+          <Route exact path="/mp3/create" render={() => <Mp3CreateForm />} />
+          
           <Route
             exact
             path="/profiles/:id/edit/username"
