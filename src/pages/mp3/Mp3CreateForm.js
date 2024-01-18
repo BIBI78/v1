@@ -6,46 +6,39 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
-
 import Asset from "../../components/Asset";
 import Upload from "../../assets/upload.png";
-
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
-
 import { useHistory } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
-import { useRedirect } from "../../hooks/useRedirect";
 
 function Mp3CreateForm() {
-  useRedirect("loggedOut");
   const [errors, setErrors] = useState({});
-
-  const [mp3Info, setMp3Info] = useState({
+  const [mp3Data, setMp3Data] = useState({
     title: "",
     artist: "",
-    genre: "",
     mp3File: null,
   });
-
-  const { title, artist, genre, mp3File } = mp3Info;
-
+  const { title, artist, mp3File } = mp3Data;
   const mp3Input = useRef(null);
   const history = useHistory();
 
   const handleChange = (event) => {
-    setMp3Info({
-      ...mp3Info,
+    setMp3Data({
+      ...mp3Data,
       [event.target.name]: event.target.value,
     });
   };
 
-  const handleFileChange = (event) => {
-    setMp3Info({
-      ...mp3Info,
-      mp3File: event.target.files[0],
-    });
+  const handleMp3FileChange = (event) => {
+    if (event.target.files.length) {
+      setMp3Data({
+        ...mp3Data,
+        mp3File: event.target.files[0],
+      });
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -54,7 +47,6 @@ function Mp3CreateForm() {
 
     formData.append("title", title);
     formData.append("artist", artist);
-    formData.append("genre", genre);
     formData.append("mp3File", mp3File);
 
     try {
@@ -101,58 +93,6 @@ function Mp3CreateForm() {
         </Alert>
       ))}
 
-      <Form.Group>
-        <Form.Label>Genre</Form.Label>
-        <Form.Control
-          type="text"
-          name="genre"
-          value={genre}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      {errors?.genre?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
-
-      <Form.Group className="text-center">
-        {mp3File ? (
-          <>
-            <div>
-              <Form.Label
-                className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
-                htmlFor="mp3-upload"
-              >
-                Change the MP3 file
-              </Form.Label>
-            </div>
-          </>
-        ) : (
-          <Form.Label
-            className="d-flex justify-content-center"
-            htmlFor="mp3-upload"
-          >
-            <Asset
-              src={Upload}
-              message="Click or tap to upload an MP3 file"
-            />
-          </Form.Label>
-        )}
-
-        <Form.File
-          id="mp3-upload"
-          accept="audio/mp3"
-          onChange={handleFileChange}
-          ref={mp3Input}
-        />
-      </Form.Group>
-      {errors?.mp3File?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
-
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
@@ -172,7 +112,44 @@ function Mp3CreateForm() {
           <Container
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
-            {textFields}
+            <Form.Group className="text-center">
+              {mp3File ? (
+                <div>
+                  <div>
+                    <Form.Label
+                      className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
+                      htmlFor="mp3-upload"
+                    >
+                      Change the MP3 file
+                    </Form.Label>
+                  </div>
+                </div>
+              ) : (
+                <Form.Label
+                  className="d-flex justify-content-center"
+                  htmlFor="mp3-upload"
+                >
+                  <Asset
+                    src={Upload}
+                    message="Click or tap to upload an MP3 file"
+                  />
+                </Form.Label>
+              )}
+
+              <Form.File
+                id="mp3-upload"
+                accept=".mp3"
+                onChange={handleMp3FileChange}
+                ref={mp3Input}
+              />
+            </Form.Group>
+            {errors?.mp3File?.map((message, idx) => (
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
+            ))}
+
+            <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
