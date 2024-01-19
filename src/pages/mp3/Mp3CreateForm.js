@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
-import Image from "react-bootstrap/Image";
+// import Image from "react-bootstrap/Image";
 import Asset from "../../components/Asset";
 import Upload from "../../assets/upload.png";
 import styles from "../../styles/PostCreateEditForm.module.css";
@@ -52,6 +52,7 @@ function Mp3CreateForm() {
     try {
       const { data } = await axiosReq.post("/mp3/create", formData);
       console.log('MP3 created successfully:', data);
+      history.push(`/mp3/${data.id}`);
       // Redirect to the newly created MP3's page or another page as needed
     } catch (err) {
       console.log(err);
