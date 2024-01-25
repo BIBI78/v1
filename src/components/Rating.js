@@ -1,4 +1,3 @@
-// Rating.js
 
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -12,7 +11,6 @@ const Rating = ({ postId, initialRating, onRatingChange }) => {
     try {
       // Send a request to the server to handle the rating for the specific post
       const response = await axios.post(`/rating/${postId}/`, { rating: newRating });
-
 
       // Assuming the server responds with the updated rating
       const updatedRating = response.data.rating;
@@ -33,7 +31,7 @@ const Rating = ({ postId, initialRating, onRatingChange }) => {
       {[1, 2, 3, 4, 5].map((value) => (
         <span
           key={value}
-          className={`${styles.Star} ${value <= (hoveredRating || rating) ? styles.SelectedStar : ''}`}
+          className={`${styles.Star} ${value <= (hoveredRating || rating) ? styles.Selected : ''}`}
           onClick={() => handleRate(value)}
           onMouseEnter={() => setHoveredRating(value)}
           onMouseLeave={() => setHoveredRating(null)}
