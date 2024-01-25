@@ -10,7 +10,8 @@ const Rating = ({ postId, initialRating, onRatingChange }) => {
   const handleRate = async (newRating) => {
     try {
       // Send a request to the server to handle the rating for the specific post
-      const response = await axios.post(`/rating/${postId}/`, { rating: newRating });
+      // here is the problem 
+      const response = await axios.post(`/rating/`, { postId: postId, rating: newRating });
 
       // Assuming the server responds with the updated rating
       const updatedRating = response.data.rating;
