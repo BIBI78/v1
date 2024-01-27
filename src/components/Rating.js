@@ -1,24 +1,46 @@
+// Rating.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../styles/Rating.module.css';
 
-const Rating = ({ postId, initialRating, onRatingChange }) => {
+const Rating = ({ postId, mp3Id, initialRating, onRatingChange }) => {
   const [rating, setRating] = useState(initialRating);
   const [hoveredRating, setHoveredRating] = useState(null);
 
+  useEffect(() => {
+    // Fetch the existing rating when the component mounts
+    const fetchRating = async () => {
+      try {
+        let response;
+        if (postId) {
+          response = await axios.get(`/rating/?post=${postId}`);
+        } else if (mp3Id) {
+          response = await axios.get(`/rating/?mp3=${mp3Id}`);
+        }
+        const fetchedRating = response.data[0].rating;  // Assuming you only get one rating
+        setRating(fetchedRating);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchRating();
+  }, [postId, mp3Id]);
+
   const handleRate = async (newRating) => {
     try {
-      // Send a request to the server to handle the rating for the specific post
-      // here is the problem 
-      const response = await axios.post(`/rating/`, { postId: postId, rating: newRating });
-
-      // Assuming the server responds with the updated rating
+      let response;
+      if (postId) {
+        response = await axios.post(`/rating/`, { post: postId, rating: newRating });
+      } else if (mp3Id) {
+        response = await axios.post(`/rating/`, { mp3: mp3Id, rating: newRating });
+      }
+      
       const updatedRating = response.data.rating;
       setRating(updatedRating);
-      setHoveredRating(null); // Reset hovered rating when a rating is selected
+      setHoveredRating(null);
 
-      // Optionally, notify the parent component about the rating change
       if (onRatingChange) {
         onRatingChange(updatedRating);
       }
