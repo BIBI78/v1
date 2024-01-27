@@ -8,7 +8,11 @@ import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
-import Rating from "../../components/Rating"; // Import the Rating component
+
+// Star rating library
+import { Rating } from "react-simple-star-rating";
+
+
 
 const Post = (props) => {
   const {
@@ -32,7 +36,7 @@ const Post = (props) => {
   const history = useHistory();
 
   // New state for rating
-  const [userRating, setUserRating] = useState(null);
+  
 
   const handleEdit = () => {
     history.push(`/posts/${id}/edit`);
@@ -79,18 +83,6 @@ const Post = (props) => {
     }
   };
 
-  // New function to handle rating
-  // eslint-disable-next-line no-unused-vars
-  const handleRate = async (value) => {
-    try {
-      // Send the rating to the backend
-      await axiosRes.post(`/rating/${id}/rate/`, { rating: value });
-      // Update the local state
-      setUserRating(value);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <Card className={styles.Post}>
@@ -149,14 +141,11 @@ const Post = (props) => {
         </div>
 
         {/* Render the Rating component */}
+        {/* RATING BLAH BLAH SHOULD GO HERE */}
+       
+  
 
-      <Rating postId={id} initialRating={userRating} onRatingChange={setUserRating} />
-
-      {userRating && (
-        <div className={styles.UserRating}>
-          Your Rating: {userRating}
-          </div>
-        )}
+    
       </Card.Body>
     </Card>
   );
