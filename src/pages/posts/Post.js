@@ -1,13 +1,15 @@
 // Post.js
- // eslint-disable-next-line 
-import React, { useState } from "react";
+// eslint-disable-next-line
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/Post.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
-import { axiosRes } from "../../api/axiosDefaults";
+import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
+import { Rating } from "react-simple-star-rating";
+import star from "../../styles/Star.module.css";
 
 
 const Post = (props) => {
@@ -30,9 +32,7 @@ const Post = (props) => {
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
-
-  // New state for rating
- 
+  const [averageRating, setAverageRating] = useState(0);
 
   const handleEdit = () => {
     history.push(`/posts/${id}/edit`);
@@ -79,9 +79,31 @@ const Post = (props) => {
     }
   };
 
-  // New function to handle rating
-  // eslint-disable-next-line no-unused-vars
- 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [{ data: ratingsData }] = await Promise.all([
+          axiosReq.get(`/rating/`),
+        ]);
+
+        const ratingsForEvent = ratingsData.results.filter(
+          (rating) => rating.event === parseInt(id)
+        );
+        const totalRatings = ratingsForEvent.reduce(
+          (acc, rating) => acc + rating.rating,
+          0
+        );
+        const averageRating = ratingsForEvent.length
+          ? totalRatings / ratingsForEvent.length
+          : 0;
+        setAverageRating(averageRating);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   return (
     <Card className={styles.Post}>
@@ -102,9 +124,25 @@ const Post = (props) => {
           </div>
         </Media>
       </Card.Body>
+
+      <Card.Title>
+        {title}
+        <span className="float-right">
+          <i className="fa-regular fa-comments"></i> {comments_count}{" "}
+          <Rating
+            className={star.Star}
+            readonly
+            initialValue={averageRating.toFixed(1)}
+            size={25}
+          />
+          {averageRating.toFixed(1)}
+        </span>
+      </Card.Title>
+
       <Link to={`/posts/${id}`}>
         <Card.Img src={image} alt={title} />
       </Link>
+
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}
@@ -138,10 +176,6 @@ const Post = (props) => {
           </Link>
           {comments_count}
         </div>
-
-        {/* Render the Rating component */}
-
-   
       </Card.Body>
     </Card>
   );
