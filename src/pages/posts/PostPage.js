@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react";
 
+//BOOTSTRAP 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 
+// STYLE CSS
 import appStyles from "../../App.module.css";
+
+// COMPONENTS 
 import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
 import Comment from "../comments/Comment";
-// import PostRatingForm from "./PostRatingForm";
+//RATING BS
+import PostRatingForm from "./PostRatingForm";
 
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
+// AXIOS BS
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../components/Asset";
 import { fetchMoreData } from "../../utils/utils";
@@ -25,7 +31,8 @@ function PostPage() {
   const currentUser = useCurrentUser();
   const profile_image = currentUser?.profile_image;
   const [comments, setComments] = useState({ results: [] });
-  // const [averageRating, setAverageRating] = useState(0);
+  //RATING BS
+  const [averageRating, setAverageRating] = useState(0);
 
   useEffect(() => {
     const handleMount = async () => {
