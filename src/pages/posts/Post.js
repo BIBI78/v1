@@ -125,19 +125,6 @@ const Post = (props) => {
         </Media>
       </Card.Body>
 
-      <Card.Title>
-        {title}
-        <span className="float-right">
-          <i className="fa-regular fa-comments"></i> {comments_count}{" "}
-          <Rating
-            className={star.Star}
-            readonly
-            initialValue={averageRating.toFixed(1)}
-            size={25}
-          />
-          {averageRating.toFixed(1)}
-        </span>
-      </Card.Title>
 
       <Link to={`/posts/${id}`}>
         <Card.Img src={image} alt={title} />
@@ -176,6 +163,18 @@ const Post = (props) => {
           </Link>
           {comments_count}
         </div>
+       
+        <span className="float-right">
+          
+          <Rating
+            className={star.Star}
+            readonly
+            initialValue={averageRating.toFixed(1)}
+            size={25}
+          />
+          {averageRating.toFixed(1)}
+        </span>
+      
       </Card.Body>
     </Card>
   );

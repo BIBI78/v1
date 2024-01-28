@@ -9,7 +9,7 @@ import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
 import Comment from "../comments/Comment";
-import PostRatingForm from "./PostRatingForm";
+// import PostRatingForm from "./PostRatingForm";
 
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
@@ -25,7 +25,7 @@ function PostPage() {
   const currentUser = useCurrentUser();
   const profile_image = currentUser?.profile_image;
   const [comments, setComments] = useState({ results: [] });
-  const [averageRating, setAverageRating] = useState(0);
+  // const [averageRating, setAverageRating] = useState(0);
 
   useEffect(() => {
     const handleMount = async () => {
@@ -44,25 +44,11 @@ function PostPage() {
     handleMount();
   }, [id]);
 
-  // RATING BS
-  // 
-  const updateAverageRating = (newRating) => {
-    // calculate the new average rating
-    const totalRatings = averageRating * post.results[0].ratings_count;
-    const newAverageRating =
-      (totalRatings + newRating.rating) / post.results[0].ratings_count;
-
-    setAverageRating(newAverageRating);
-  };
-
-  // 
-
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <p>Popular profiles for mobile</p>
         <Post {...post.results[0]} setPosts={setPost} postPage />
-
         <Container className={appStyles.Content}>
           {currentUser ? (
             <CommentCreateForm
@@ -70,9 +56,6 @@ function PostPage() {
               profileImage={profile_image}
               post={id}
               setPost={setPost}
-              // rating bs
-              averageRating={averageRating.toFixed(2)}
-              // 
               setComments={setComments}
             />
           ) : comments.results.length ? (
@@ -98,26 +81,6 @@ function PostPage() {
           ) : (
             <span>No comments... yet</span>
           )}
-          {/*  */}
-          {/* RATING BS */}
-                      <PostRatingForm
-              // Passing props
-              profile_id={currentUser.profile_id}
-              event={id}
-              id={id}
-              // owner={owner}
-              setPost={setPost}
-              currentUser={currentUser}
-              averageRating={averageRating.toFixed(2)}
-              updateAverageRating={updateAverageRating}
-          />
-            {/* : (
-            <div>SLATT create a profile to rate some shit SLATT</div>
-          ) */}
-
-
-
-          {/*  */}
         </Container>
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
