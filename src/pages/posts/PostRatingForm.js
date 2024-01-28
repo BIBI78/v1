@@ -1,161 +1,138 @@
 /* eslint-disable */
 // React hooks
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 // Bootstrap
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
 
 // Styles and CSS
-import btnStyles from "../../styles/Button.module.css";
-import styles from "../../styles/Modal.module.css";
+import appStyles from "../../App.module.css";
 
-// rating library and Axios import
-import { Rating } from "react-simple-star-rating";
-import { axiosRes, axiosReq } from "../../api/axiosDefaults";
+// Components
+import Comment from "../comments/Comment";
+import Post from "./Post";
+import PostRatingForm from "./PostRatingForm";
+import CommentCreateForm from "../comments/CommentCreateForm";
+import PopularProfiles from "../profiles/PopularProfiles";
 
-// Context
+// Axios, user context and utils
+import { axiosReq } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { fetchMoreData } from "../../utils/utils";
+import Asset from "../../components/Asset";
 
-// Event rating form, shows the stars and then sends rating to the API
-function EventRatingForm(props) {
-  const { event, setEvent, id, owner } = props;
+// Gets the post info, id and comments and passing it down as props
 
-  const [rating, setRating] = useState(0);
-  const [showModal, setShowModal] = useState(false);
-  const [noRateModal, setNoRateModal] = useState(false);
-  const [ownerRateModal, setOwnerRateModal] = useState(false);
+function PostPage() {
+  const { id } = useParams();
+  const [post, setPost] = useState({ results: [] });
+
   const currentUser = useCurrentUser();
-  const is_owner = currentUser?.username === owner;
+  const profile_image = currentUser?.profile_image;
+  const [comments, setComments] = useState({ results: [] });
+  const [averageRating, setAverageRating] = useState(0);
+  const owner = post.results[0]?.owner;
 
-  const handleRating = (rate) => {
-    setRating(rate);
-  };
-
-  const handleRatingSubmit = async (e) => {
-    // Post new rating to database
-    e.preventDefault();
-    try {
-      const { data: ratingsData } = await axiosReq.get(`/rating/`);
-      // check if user has already rated and to compare event with id i
-      // convert id to integer
-      const userRating = ratingsData.results.find((rating) => {
-        return (
-          rating.owner === currentUser?.username &&
-          rating.event === parseInt(id, 10)
-        );
-      });
-
-      // if the current user has already rated the event
-      if (userRating) {
-        setNoRateModal(true);
-        setTimeout(() => setNoRateModal(false), 3000);
-        return;
+  useEffect(() => {
+    // fetch both post and comment data from the API
+    const fetchData = async () => {
+      try {
+        const [{ data: post }, { data: comments }] = await Promise.all([
+          axiosReq.get(`/posts/${id}`),
+          axiosReq.get(`/comments/?post=${id}`),
+        ]);
+        setPost({ results: [post] });
+        setComments(comments);
+      } catch (err) {
+        // console.log(err);
       }
+    };
 
-      // if user is owner of the event
-      if (is_owner) {
-        setOwnerRateModal(true);
-        setTimeout(() => setOwnerRateModal(false), 3000);
-        return;
-      }
+    fetchData();
+  }, [id]);
 
-      // Post new rating to database
-      await axiosRes.post("/rating/", {
-        event,
-        rating,
-      });
+  const updateAverageRating = (newRating) => {
+    // calculate the new average rating
+    const totalRatings = averageRating * post.results[0].ratings_count;
+    const newAverageRating =
+      (totalRatings + newRating.rating) / post.results[0].ratings_count;
 
-      setEvent((prevEvent) => ({
-        ...prevEvent,
-        results: prevEvent.results.map((event) => {
-          return event.id === parseInt(id)
-            ? {
-                ...event,
-                rating: event.rating,
-                ratings_count: event.ratings_count + 1,
-              }
-            : event;
-        }),
-      }));
-
-      // Pass the rating to parent
-      setShowModal(true);
-      // Show modal and close it after 2 seconds.
-      setTimeout(() => setShowModal(false), 2000);
-      setRating(0);
-    } catch (err) {
-      // console.log(err);
-    }
+    setAverageRating(newAverageRating);
   };
 
   return (
-    <>
-      <div className="text-center">Rate This Event</div>
-      <Form className="mt-2 pb-4" onSubmit={handleRatingSubmit}>
-        <div className="text-center p-1 mb-1">
-          <Rating onClick={handleRating} />
-        </div>
-        <button
-          className={`${btnStyles.Button} ${btnStyles.Bright}`}
-          type="submit"
-        >
-          Submit
-        </button>
-      </Form>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Rating</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <p className={styles.Psuccess}>
-            Thank you, your rating has been registered.
-          </p>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setNoRateModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={noRateModal} onHide={() => setNoRateModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Rating</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <p>
-            Sorry, it seems you have already rated this event, you can only rate
-            a event once...
-          </p>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setNoRateModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={ownerRateModal} onHide={() => setOwnerRateModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Rating</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <p>Sorry, you cant rate your own event.</p>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setOwnerRateModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Row className="h-100">
+      <Col className="py-2 p-0 p-lg-2" lg={8}>
+        <PopularProfiles mobile />
+        <Post
+          {...post.results[0]}
+          id={id}
+          setPosts={setPost}
+          averageRating={averageRating.toFixed(2)}
+          postPage
+        />
+        <Container className={`mb-3 ${appStyles.Content}`}>
+          {/* Ternary to check if current user can comment */}
+          {currentUser && currentUser.profile_id ? (
+            <PostRatingForm
+              // Passing props
+              profile_id={currentUser.profile_id}
+              post={id}
+              id={id}
+              owner={owner}
+              setPost={setPost}
+              currentUser={currentUser}
+              averageRating={averageRating.toFixed(2)}
+              updateAverageRating={updateAverageRating}
+            />
+          ) : (
+            <div>Create an account or login to rate the post twizzy ...</div>
+          )}
+        </Container>
+        <Container className={appStyles.Content}>
+          {currentUser ? (
+            <CommentCreateForm
+              // Passing props
+              profile_id={currentUser.profile_id}
+              profileImage={profile_image}
+              post={id}
+              setPost={setPost}
+              setComments={setComments}
+            />
+          ) : comments.results.length ? (
+            "Comments"
+          ) : null}
+          {comments.results.length ? (
+            <InfiniteScroll
+              children={comments.results.map((comment) => (
+                <Comment
+                  key={comment.id}
+                  {...comment}
+                  setPost={setPost}
+                  setComments={setComments}
+                />
+              ))}
+              dataLength={comments.results.length}
+              loader={<Asset spinner />}
+              hasMore={!!comments.next}
+              next={() => fetchMoreData(comments, setComments)}
+            />
+          ) : currentUser ? (
+            <span>No comments yet, be the first to comment!</span>
+          ) : (
+            <span>No comments... yet</span>
+          )}
+        </Container>
+      </Col>
+      <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
+        <PopularProfiles />
+      </Col>
+    </Row>
   );
 }
 
-export default PostRatingForm;
+export default PostPage;

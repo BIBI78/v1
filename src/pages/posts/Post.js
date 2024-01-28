@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+// Post.js
+ // eslint-disable-next-line 
+import React, { useState } from "react";
 import styles from "../../styles/Post.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -6,7 +8,7 @@ import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
-import StarRating from 'react-simple-star-rating';
+
 
 const Post = (props) => {
   const {
@@ -29,11 +31,7 @@ const Post = (props) => {
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
 
-  // RATING BS
-  const [averageRating, setAverageRating] = useState(0);
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [loadingError, setLoadingError] = useState(null);
-
+  // New state for rating
  
 
   const handleEdit = () => {
@@ -45,7 +43,7 @@ const Post = (props) => {
       await axiosRes.delete(`/posts/${id}/`);
       history.goBack();
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 
@@ -60,8 +58,8 @@ const Post = (props) => {
             : post;
         }),
       }));
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -76,10 +74,14 @@ const Post = (props) => {
             : post;
         }),
       }));
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.log(err);
     }
   };
+
+  // New function to handle rating
+  // eslint-disable-next-line no-unused-vars
+ 
 
   return (
     <Card className={styles.Post}>
@@ -138,26 +140,11 @@ const Post = (props) => {
         </div>
 
         {/* Render the Rating component */}
-        {/* RATING BLAH BLAH SHOULD GO HERE */}
-        {loadingError ? (
-          <div>{loadingError}</div>
-        ) : hasLoaded ? (
-          <>
-            <StarRating
-              className={styles.Star}
-              readonly
-              ratingValue={averageRating}
-              size={25}
-            />
-            {averageRating.toFixed(1)}
-          </>
-        ) : (
-          "Loading rating..."
-        )}
+
+   
       </Card.Body>
     </Card>
   );
 };
 
 export default Post;
-

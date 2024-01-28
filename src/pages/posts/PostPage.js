@@ -9,6 +9,7 @@ import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
 import Comment from "../comments/Comment";
+// import PostRatingForm from "./PostRatingForm";
 
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
@@ -24,6 +25,7 @@ function PostPage() {
   const currentUser = useCurrentUser();
   const profile_image = currentUser?.profile_image;
   const [comments, setComments] = useState({ results: [] });
+  // const [averageRating, setAverageRating] = useState(0);
 
   useEffect(() => {
     const handleMount = async () => {
