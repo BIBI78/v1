@@ -37,7 +37,7 @@ function EventRatingForm(props) {
     // Post new rating to database
     e.preventDefault();
     try {
-      const { data: ratingsData } = await axiosReq.get(`/ratings/`);
+      const { data: ratingsData } = await axiosReq.get(`/rating/`);
       // check if user has already rated and to compare event with id i
       // convert id to integer
       const userRating = ratingsData.results.find((rating) => {
@@ -62,7 +62,7 @@ function EventRatingForm(props) {
       }
 
       // Post new rating to database
-      await axiosRes.post("/ratings/", {
+      await axiosRes.post("/rating/", {
         event,
         rating,
       });
@@ -158,4 +158,4 @@ function EventRatingForm(props) {
   );
 }
 
-export default EventRatingForm;
+export default PostRatingForm;

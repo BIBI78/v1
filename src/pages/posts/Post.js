@@ -1,6 +1,4 @@
-// Post.js
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../../styles/Post.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -8,11 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
-
-// Star rating library
-import { Rating } from "react-simple-star-rating";
-
-
+import StarRating from 'react-simple-star-rating';
 
 const Post = (props) => {
   const {
@@ -35,8 +29,12 @@ const Post = (props) => {
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
 
-  // New state for rating
-  
+  // RATING BS
+  const [averageRating, setAverageRating] = useState(0);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [loadingError, setLoadingError] = useState(null);
+
+ 
 
   const handleEdit = () => {
     history.push(`/posts/${id}/edit`);
@@ -47,7 +45,7 @@ const Post = (props) => {
       await axiosRes.delete(`/posts/${id}/`);
       history.goBack();
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -62,8 +60,8 @@ const Post = (props) => {
             : post;
         }),
       }));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -78,11 +76,10 @@ const Post = (props) => {
             : post;
         }),
       }));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.error(error);
     }
   };
-
 
   return (
     <Card className={styles.Post}>
@@ -142,13 +139,25 @@ const Post = (props) => {
 
         {/* Render the Rating component */}
         {/* RATING BLAH BLAH SHOULD GO HERE */}
-       
-  
-
-    
+        {loadingError ? (
+          <div>{loadingError}</div>
+        ) : hasLoaded ? (
+          <>
+            <StarRating
+              className={styles.Star}
+              readonly
+              ratingValue={averageRating}
+              size={25}
+            />
+            {averageRating.toFixed(1)}
+          </>
+        ) : (
+          "Loading rating..."
+        )}
       </Card.Body>
     </Card>
   );
 };
 
 export default Post;
+
