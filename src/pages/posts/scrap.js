@@ -34,7 +34,9 @@ function EventPage() {
   const currentUser = useCurrentUser();
   const profile_image = currentUser?.profile_image;
   const [comments, setComments] = useState({ results: [] });
+
   const [averageRating, setAverageRating] = useState(0);
+  
   const owner = event.results[0]?.owner;
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 //BOOTSTRAP 
 import Col from "react-bootstrap/Col";
@@ -9,9 +10,10 @@ import Container from "react-bootstrap/Container";
 import appStyles from "../../App.module.css";
 
 // COMPONENTS 
-import { useParams } from "react-router";
+// import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
+// import PostRatingForm from "./PostRatingForm";
 import Comment from "../comments/Comment";
 //RATING BS
 import PostRatingForm from "./PostRatingForm";
@@ -24,6 +26,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../components/Asset";
 import { fetchMoreData } from "../../utils/utils";
 
+
 function PostPage() {
   const { id } = useParams();
   const [post, setPost] = useState({ results: [] });
@@ -31,8 +34,10 @@ function PostPage() {
   const currentUser = useCurrentUser();
   const profile_image = currentUser?.profile_image;
   const [comments, setComments] = useState({ results: [] });
-  //RATING BS
+  //Rating set state 
   const [averageRating, setAverageRating] = useState(0);
+  // ?? OWNER ??
+  const owner = post.results[0]?.owner;
 
   useEffect(() => {
     const handleMount = async () => {
@@ -49,13 +54,49 @@ function PostPage() {
     };
 
     handleMount();
+    
   }, [id]);
+// Rating calculation 
+    const updateAverageRating = (newRating) => {
+    // calculate the new average rating
+    const totalRatings = averageRating * post.results[0].ratings_count;
+    const newAverageRating =
+      (totalRatings + newRating.rating) / post.results[0].ratings_count;
+
+    setAverageRating(newAverageRating);
+  };
 
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <p>Popular profiles for mobile</p>
-        <Post {...post.results[0]} setPosts={setPost} postPage />
+        <Post {...post.results[0]}
+          id={id}
+          setPosts={setPost}
+          averageRating={averageRating.toFixed(2)}
+          postPage
+        />
+        {/* HERE I PUT THE RATING FORM */}
+              <Container className={`mb-3 ${appStyles.Content}`}>
+          {/* Ternary to check if current user can comment */}
+          {currentUser && currentUser.profile_id ? (
+            <PostRatingForm
+              // Passing props
+              profile_id={currentUser.profile_id}
+              event={id}
+              id={id}
+              owner={owner}
+              setPost={setPost}
+              currentUser={currentUser}
+              averageRating={averageRating.toFixed(2)}
+              updateAverageRating={updateAverageRating}
+            />
+          ) : (
+            <div>Create an account or login to rate the event...</div>
+          )}
+          </Container>
+        {/*  */}
+
         <Container className={appStyles.Content}>
           {currentUser ? (
             <CommentCreateForm
