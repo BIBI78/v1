@@ -1,16 +1,31 @@
 // Post.js
 // eslint-disable-next-line
+
+// React hooks
 import React, { useEffect, useState } from "react";
-import styles from "../../styles/Post.module.css";
-import { useCurrentUser } from "../../contexts/CurrentUserContext";
-import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import Avatar from "../../components/Avatar";
-import { axiosReq, axiosRes } from "../../api/axiosDefaults";
-import { MoreDropdown } from "../../components/MoreDropdown";
-import { Rating } from "react-simple-star-rating";
+
+// Styles and CSS
+import styles from "../../styles/Post.module.css";
+import btnStyles from "../../styles/Button.module.css";
 import star from "../../styles/Star.module.css";
 
+// Bootstrap
+import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+
+// Axios and avatar import
+import Avatar from "../../components/Avatar";
+import { axiosReq, axiosRes } from "../../api/axiosDefaults";
+
+// Context and component
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import { MoreDropdown } from "../../components/MoreDropdown";
+
+// Star rating library
+import { Rating } from "react-simple-star-rating";
 
 const Post = (props) => {
   const {
@@ -33,6 +48,8 @@ const Post = (props) => {
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
   const [averageRating, setAverageRating] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const handleEdit = () => {
     history.push(`/posts/${id}/edit`);
@@ -86,23 +103,30 @@ const Post = (props) => {
           axiosReq.get(`/rating/`),
         ]);
 
-        const ratingsForEvent = ratingsData.results.filter(
-          (rating) => rating.event === parseInt(id)
+        const ratingsForPost = ratingsData.results.filter(
+          (rating) => rating.post === parseInt(id)
         );
-        const totalRatings = ratingsForEvent.reduce(
+        const totalRatings = ratingsForPost.reduce(
           (acc, rating) => acc + rating.rating,
           0
         );
-        const averageRating = ratingsForEvent.length
-          ? totalRatings / ratingsForEvent.length
+        const averageRating = ratingsForPost.length
+          ? totalRatings / ratingsForPost.length
           : 0;
+
         setAverageRating(averageRating);
+        setHasLoaded(true);
       } catch (err) {
         console.log(err);
       }
     };
 
-    fetchData();
+    setHasLoaded(false);
+    const timer = setTimeout(() => {
+      fetchData();
+    }, [id]);
+
+    return () => clearTimeout(timer);
   }, [id]);
 
   return (
@@ -116,15 +140,11 @@ const Post = (props) => {
           <div className="d-flex align-items-center">
             <span>{updated_at}</span>
             {is_owner && postPage && (
-              <MoreDropdown
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-              />
+              <MoreDropdown handleEdit={handleEdit} handleDelete={handleDelete} />
             )}
           </div>
         </Media>
       </Card.Body>
-
 
       <Link to={`/posts/${id}`}>
         <Card.Img src={image} alt={title} />
@@ -163,18 +183,22 @@ const Post = (props) => {
           </Link>
           {comments_count}
         </div>
-       
+
         <span className="float-right">
-          
-          <Rating
-            className={star.Star}
-            readonly
-            initialValue={averageRating.toFixed(1)}
-            size={25}
-          />
-          {averageRating.toFixed(1)}
+          {hasLoaded ? (
+            <>
+              <Rating
+                className={star.Star}
+                readonly
+                initialValue={averageRating.toFixed(1)}
+                size={25}
+              />
+              {averageRating.toFixed(1)}
+            </>
+          ) : (
+            "Loading rating..."
+          )}
         </span>
-      
       </Card.Body>
     </Card>
   );

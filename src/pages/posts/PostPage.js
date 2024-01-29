@@ -40,7 +40,7 @@ function PostPage() {
   const owner = post.results[0]?.owner;
 
   useEffect(() => {
-    const handleMount = async () => {
+    const fetchData = async () => {
       try {
         const [{ data: post }, { data: comments }] = await Promise.all([
           axiosReq.get(`/posts/${id}/`),
@@ -53,7 +53,7 @@ function PostPage() {
       }
     };
 
-    handleMount();
+    fetchData();
     
   }, [id]);
 // Rating calculation 
@@ -83,7 +83,7 @@ function PostPage() {
             <PostRatingForm
               // Passing props
               profile_id={currentUser.profile_id}
-              event={id}
+              post={id}
               id={id}
               owner={owner}
               setPost={setPost}
@@ -92,7 +92,7 @@ function PostPage() {
               updateAverageRating={updateAverageRating}
             />
           ) : (
-            <div>Create an account or login to rate the event...</div>
+            <div>Create an account or login to rate the post vamp...</div>
           )}
           </Container>
         {/*  */}
