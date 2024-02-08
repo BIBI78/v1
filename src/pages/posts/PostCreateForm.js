@@ -1,38 +1,28 @@
-import React, { useRef, useState } from "react";
-
+import React, { useState, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import Alert from "react-bootstrap/Alert";
-import Image from "react-bootstrap/Image";
-
-import Asset from "../../components/Asset";
-
 import Upload from "../../assets/upload.png";
-
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
-
-import { useHistory } from "react-router";
-import { axiosReq } from "../../api/axiosDefaults";
-import { useRedirect } from "../../hooks/useRedirect";
+import Asset from "../../components/Asset";
+import { Image } from "react-bootstrap";
 
 function PostCreateForm() {
-  useRedirect("loggedOut");
-  const [errors, setErrors] = useState({});
-
   const [postData, setPostData] = useState({
     title: "",
     content: "",
+    mp3: null,
     image: "",
   });
-  const { title, content, image } = postData;
 
+  const mp3Input = useRef(null);
   const imageInput = useRef(null);
-  const history = useHistory();
+
+  const { title, content, mp3, image } = postData;
 
   const handleChange = (event) => {
     setPostData({
@@ -51,22 +41,12 @@ function PostCreateForm() {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("image", imageInput.current.files[0]);
-
-    try {
-      const { data } = await axiosReq.post("/posts/", formData);
-      history.push(`/posts/${data.id}`);
-    } catch (err) {
-      console.log(err);
-      if (err.response?.status !== 401) {
-        setErrors(err.response?.data);
-      }
+  const handleMp3Change = (event) => {
+    if (event.target.files.length) {
+      setPostData({
+        ...postData,
+        mp3: event.target.files[0],
+      });
     }
   };
 
@@ -81,11 +61,6 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
-      {errors?.title?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
 
       <Form.Group>
         <Form.Label>Content</Form.Label>
@@ -97,26 +72,39 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
-      {errors?.content?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
+
+<Form.Group>
+  <Form.Label>MP3</Form.Label>
+  <div className="custom-file">
+    <input
+      type="file"
+      className="custom-file-input"
+      id="mp3-upload"
+      accept=".mp3"
+      onChange={handleMp3Change}
+    />
+    <label className="custom-file-label" htmlFor="mp3-upload">
+      Choose MP3 file
+    </label>
+  </div>
+</Form.Group>
+
+
 
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
-        onClick={() => history.goBack()}
+        onClick={() => {}}
       >
-        cancel
+        Cancel
       </Button>
       <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
-        create
+        Create
       </Button>
     </div>
   );
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form>
       <Row>
         <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
           <Container
@@ -156,15 +144,11 @@ function PostCreateForm() {
                 ref={imageInput}
               />
             </Form.Group>
-            {errors?.image?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
-                {message}
-              </Alert>
-            ))}
 
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
+
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
           <Container className={appStyles.Content}>{textFields}</Container>
         </Col>
