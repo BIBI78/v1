@@ -19,7 +19,7 @@ function PostCreateForm() {
     image: "",
   });
 
-  const mp3Input = useRef(null);
+  // const mp3Input = useRef(null);
   const imageInput = useRef(null);
 
   const { title, content, mp3, image } = postData;
@@ -80,14 +80,16 @@ function PostCreateForm() {
       type="file"
       className="custom-file-input"
       id="mp3-upload"
+      name="mp3"
       accept=".mp3"
       onChange={handleMp3Change}
     />
     <label className="custom-file-label" htmlFor="mp3-upload">
-      Choose MP3 file
+      {mp3 ? mp3.name : "Choose MP3 file"}
     </label>
   </div>
 </Form.Group>
+
 
 
 
