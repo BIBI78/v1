@@ -21,7 +21,8 @@ const Post = (props) => {
     image,
     updated_at,
     postPage,
-    setPosts,
+    setPosts,mp3
+
   } = props;
 
   const currentUser = useCurrentUser();
@@ -95,6 +96,15 @@ const Post = (props) => {
       <Link to={`/posts/${id}`}>
         <Card.Img src={image} alt={title} />
       </Link>
+      {/* MP3 */}
+      
+       {mp3 && (
+        <audio controls className={styles.Audio}>
+          <source src={mp3} type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      )}
+
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}

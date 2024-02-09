@@ -10,17 +10,24 @@ import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import Asset from "../../components/Asset";
 import { Image } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import Alert from 'react-bootstrap/Alert';
 
 function PostCreateForm() {
+   // eslint-disable-next-line
+  const [errors, setErrors] = useState({});
+
   const [postData, setPostData] = useState({
     title: "",
     content: "",
-    mp3: null,
+    mp3: "",
     image: "",
   });
 
-  // const mp3Input = useRef(null);
+  const mp3Input = useRef(null);
   const imageInput = useRef(null);
+  const history = useHistory();
 
   const { title, content, mp3, image } = postData;
 
@@ -41,12 +48,32 @@ function PostCreateForm() {
     }
   };
 
-  const handleMp3Change = (event) => {
+  const handleChangeMp3 = (event) => {
     if (event.target.files.length) {
       setPostData({
         ...postData,
         mp3: event.target.files[0],
       });
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("mp3", mp3);
+    formData.append("image", imageInput.current.files[0]);
+
+    try {
+      const { data } = await axios.post("/posts/", formData);
+      history.push(`/posts/${data.id}`);
+    } catch (err) {
+      console.log(err);
+      if (err.response?.status !== 401) {
+        // Handle error response
+      }
     }
   };
 
@@ -61,7 +88,11 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
-
+      {errors?.title?.map((message, idx) => (
+        <Alert variant="warning" key={idx}>
+          {message}
+        </Alert>
+      ))}
       <Form.Group>
         <Form.Label>Content</Form.Label>
         <Form.Control
@@ -72,27 +103,11 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
-
-<Form.Group>
-  <Form.Label>MP3</Form.Label>
-  <div className="custom-file">
-    <input
-      type="file"
-      className="custom-file-input"
-      id="mp3-upload"
-      name="mp3"
-      accept=".mp3"
-      onChange={handleMp3Change}
-    />
-    <label className="custom-file-label" htmlFor="mp3-upload">
-      {mp3 ? mp3.name : "Choose MP3 file"}
-    </label>
-  </div>
-</Form.Group>
-
-
-
-
+      {errors?.content?.map((message, idx) => (
+        <Alert variant="warning" key={idx}>
+          {message}
+        </Alert>
+      ))}
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => {}}
@@ -106,7 +121,7 @@ function PostCreateForm() {
   );
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Row>
         <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
           <Container
@@ -138,7 +153,6 @@ function PostCreateForm() {
                   />
                 </Form.Label>
               )}
-
               <Form.File
                 id="image-upload"
                 accept="image/*"
@@ -146,11 +160,49 @@ function PostCreateForm() {
                 ref={imageInput}
               />
             </Form.Group>
-
+            {errors?.image?.map((message, idx) => (
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
+            ))}
+            <Form.Group className="text-center">
+              {mp3 ? (
+                <>
+                  <div>
+                    <Form.Label
+                      className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
+                      htmlFor="mp3-upload"
+                    >
+                      Change the MP3 file
+                    </Form.Label>
+                  </div>
+                </>
+              ) : (
+                <Form.Label
+                  className="d-flex justify-content-center"
+                  htmlFor="mp3-upload"
+                >
+                  <Asset
+                    src={Upload}
+                    message="Click or tap to upload an MP3 file"
+                  />
+                </Form.Label>
+              )}
+              <Form.File
+                id="mp3-upload"
+                accept=".mp3"
+                onChange={handleChangeMp3}
+                ref={mp3Input}
+              />
+            </Form.Group>
+            {errors?.title?.map((message, idx) => (
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
+            ))}
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
-
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
           <Container className={appStyles.Content}>{textFields}</Container>
         </Col>
