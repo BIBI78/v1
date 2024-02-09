@@ -21,7 +21,9 @@ const Post = (props) => {
     image,
     updated_at,
     postPage,
-    setPosts,mp3
+    setPosts,
+    mp3,
+    mp3_url
 
   } = props;
 
@@ -95,15 +97,21 @@ const Post = (props) => {
       </Card.Body>
       <Link to={`/posts/${id}`}>
         <Card.Img src={image} alt={title} />
+        {mp3 && (
+        <audio controls className={styles.Audio}>
+          <source src={mp3_url} type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      )}
       </Link>
       {/* MP3 */}
-      
-       {mp3 && (
+
+       {/* {mp3 && (
         <audio controls className={styles.Audio}>
           <source src={mp3} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
-      )}
+      )} */}
 
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
