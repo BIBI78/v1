@@ -1,4 +1,4 @@
-.Post {
+.Beat {
     background-color: #ffffff;
     border: 1px solid #dadadf;
     border-radius: 2px;
@@ -6,7 +6,7 @@
     text-align: center;
 }
 
-.Post figure,
+.Beat figure,
 h5 {
     margin: 0 0;
 }
