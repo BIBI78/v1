@@ -14,24 +14,32 @@ const NavBar = () => {
 
   const { expanded, setExpanded, ref } = useClickOutsideToggle();
 
-  const handleSignOut = async () => {
+  // const handleSignOut = async () => {
+  //   try {
+  //     await axios.post("dj-rest-auth/logout/");
+  //     setCurrentUser(null);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+   const handleSignOut = async () => {
     try {
-      await axios.post("dj-rest-auth/logout/");
+      await axios.beat("dj-rest-auth/logout/");
       setCurrentUser(null);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const addPostIcon = (
-    <NavLink
-      className={styles.NavLink}
-      activeClassName={styles.Active}
-      to="/posts/create"
-    >
-      <i className="far fa-plus-square"></i>Add post
-    </NavLink>
-  );
+  // const addPostIcon = (
+  //   <NavLink
+  //     className={styles.NavLink}
+  //     activeClassName={styles.Active}
+  //     to="/posts/create"
+  //   >
+  //     <i className="far fa-plus-square"></i>Add post
+  //   </NavLink>
+  // );
 
   // const mp3Icon = (
   //   <NavLink
@@ -113,9 +121,10 @@ const NavBar = () => {
             <img src={logo} alt="logo" height="45" />
           </Navbar.Brand>
         </NavLink>
-        {currentUser && addPostIcon}
+        {currentUser && addBeatIcon} 
+        {/* {currentUser && addPostIcon} */}
         {/* {mp3Icon} */}
-        {addBeatIcon}
+        {/* {addBeatIcon} */}
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
