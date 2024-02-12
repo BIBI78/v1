@@ -15,6 +15,11 @@ import ProfilePage from "./pages/profiles/ProfilePage";
 import UsernameForm from "./pages/profiles/UsernameForm";
 import UserPasswordForm from "./pages/profiles/UserPasswordForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
+// BEATS
+import BeatCreateForm from "./pages/beats/BeatCreateForm";
+import BeatPage from "./pages/beats/BeatPage";
+import BeatsPage from "./pages/beats/BeatsPage";
+import BeatEditForm from "./pages/beats/BeatEditForm";
 
 function App() {
   const currentUser = useCurrentUser();
@@ -29,6 +34,7 @@ function App() {
             exact
             path="/"
             render={() => (
+              
               <PostsPage message="No results found. Adjust the search keyword." />
             )}
           />
