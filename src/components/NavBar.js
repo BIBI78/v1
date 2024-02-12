@@ -3,10 +3,7 @@ import { Navbar, Container, Nav } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import styles from "../styles/NavBar.module.css";
 import { NavLink } from "react-router-dom";
-import {
-  useCurrentUser,
-  useSetCurrentUser,
-} from "../contexts/CurrentUserContext";
+import { useCurrentUser, useSetCurrentUser } from "../contexts/CurrentUserContext";
 import Avatar from "./Avatar";
 import axios from "axios";
 import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
@@ -35,22 +32,27 @@ const NavBar = () => {
       <i className="far fa-plus-square"></i>Add post
     </NavLink>
   );
-  
 
+  // const mp3Icon = (
+  //   <NavLink
+  //     className={styles.NavLink}
+  //     activeClassName={styles.Active}
+  //     to="/mp3s/create" // Update the route to the correct path for MP3 upload
+  //   >
+  //     <i className="far fa-file-audio"></i>Upload MP3
+  //   </NavLink>
+  // );
 
-  //
-   const mp3Icon = (
+ const addBeatIcon = (
     <NavLink
       className={styles.NavLink}
       activeClassName={styles.Active}
-      to="/mp3s/create" // Update the route to the correct path for MP3 upload
+      to="/beats/create" 
     >
-      <i className="far fa-file-audio"></i>Upload MP3
+      <i className="far fa-file-audio"></i>Upload Beats
     </NavLink>
-  );
-  //
-
-
+ );
+  
   const loggedInIcons = (
     <>
       <NavLink
@@ -76,9 +78,9 @@ const NavBar = () => {
       >
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
       </NavLink>
-
     </>
   );
+
   const loggedOutIcons = (
     <>
       <NavLink
@@ -96,7 +98,6 @@ const NavBar = () => {
         <i className="fas fa-user-plus"></i>Sign up
       </NavLink>
     </>
-   
   );
 
   return (
@@ -113,12 +114,14 @@ const NavBar = () => {
           </Navbar.Brand>
         </NavLink>
         {currentUser && addPostIcon}
-        {mp3Icon}
+        {/* {mp3Icon} */}
+        {addBeatIcon}
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
           aria-controls="basic-navbar-nav"
         />
+        
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
             <NavLink
@@ -129,7 +132,6 @@ const NavBar = () => {
             >
               <i className="fas fa-home"></i>Home
             </NavLink>
-
             {currentUser ? loggedInIcons : loggedOutIcons}
           </Nav>
         </Navbar.Collapse>
@@ -139,3 +141,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+

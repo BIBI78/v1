@@ -18,6 +18,7 @@ import ProfileEditForm from "./pages/profiles/ProfileEditForm";
 // BEATS
 import BeatCreateForm from "./pages/beats/BeatCreateForm";
 import BeatPage from "./pages/beats/BeatPage";
+// eslint-disable-next-line
 import BeatsPage from "./pages/beats/BeatsPage";
 import BeatEditForm from "./pages/beats/BeatEditForm";
 
@@ -34,7 +35,7 @@ function App() {
             exact
             path="/"
             render={() => (
-              
+              // Might need to put beats here
               <PostsPage message="No results found. Adjust the search keyword." />
             )}
           />
@@ -42,6 +43,7 @@ function App() {
             exact
             path="/feed"
             render={() => (
+              // beats ?
               <PostsPage
                 message="No results found. Adjust the search keyword or follow a user."
                 filter={`owner__followed__owner__profile=${profile_id}&`}
@@ -52,6 +54,7 @@ function App() {
             exact
             path="/liked"
             render={() => (
+              // beats ?
               <PostsPage
                 message="No results found. Adjust the search keyword or like a post."
                 filter={`likes__owner__profile=${profile_id}&ordering=-likes__created_at&`}
@@ -61,10 +64,16 @@ function App() {
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/posts/create" render={() => <PostCreateForm />} />
+          {/* might need to take out this mp3 route */}
           <Route exact path="/mp3s/create" render={() => <Mp3CreateForm />} />
           <Route exact path="/posts/:id" render={() => <PostPage />} />
           <Route exact path="/posts/:id/edit" render={() => <PostEditForm />} />
           <Route exact path="/profiles/:id" render={() => <ProfilePage />} />
+          
+         <Route exact path="/beats/:id" render={() => <BeatPage />} />
+          <Route exact path="/beats/:id/edit" render={() => <BeatEditForm />} />
+          <Route exact path="/beats/create" render={() => <BeatCreateForm />} />
+          
           <Route
             exact
             path="/profiles/:id/edit/username"
