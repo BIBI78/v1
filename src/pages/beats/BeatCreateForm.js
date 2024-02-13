@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Upload from "../../assets/upload.png";
 import styles from "../../styles/BeatCreateEditForm.module.css";
-import appStyles from "../../App.module.css";
+import appStyles from "../../App.module.css"; 
 import btnStyles from "../../styles/Button.module.css";
 import Asset from "../../components/Asset";
 import { Image } from "react-bootstrap";
@@ -67,7 +67,7 @@ function BeatCreateForm() {
     formData.append("image", imageInput.current.files[0]);
 
     try {
-      const { data } = await axios.beat("/beats/", formData);
+      const { data } = await axios.post("/beats/", formData);
       history.push(`/beats/${data.id}`);
     } catch (err) {
       console.log(err);

@@ -46,6 +46,7 @@ const Beat = (props) => {
 
   const handleLike = async () => {
     try {
+      //  might be a probem with axios beat , shopould be post?
       const { data } = await axiosRes.beat("/likes/", { beat: id });
       setBeats((prevBeats) => ({
         ...prevBeats,
