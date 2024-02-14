@@ -6,6 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
+import musicImage from "../../assets/music.jpg";
 
 const Beat = (props) => {
   const {
@@ -97,7 +98,8 @@ const Beat = (props) => {
         </Media>
       </Card.Body>
       <Link to={`/beats/${id}`}>
-        <Card.Img src={image} alt={title} />
+        {/* <Card.Img src={image} alt={title} /> */}
+        <Card.Img src={musicImage} alt={title} />
         {mp3 && (
         <audio controls className={styles.Audio}>
           <source src={mp3_url} type="audio/mpeg" />

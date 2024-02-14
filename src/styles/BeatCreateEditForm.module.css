@@ -1,3 +1,10 @@
 .Container {
     min-height: 343px;
 }
+
+.smallImage {
+    width: 100px;
+    /* Adjust the width to your preference */
+    height: auto;
+    /* Adjust the height to maintain aspect ratio */
+}

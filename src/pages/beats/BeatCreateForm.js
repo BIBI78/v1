@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+ import React, { useState, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -13,6 +13,7 @@ import { Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Alert from 'react-bootstrap/Alert';
+import musicImage from "../../assets/music.jpg";
 
 const BeatCreateForm = () => {
    // eslint-disable-next-line
@@ -27,7 +28,8 @@ const BeatCreateForm = () => {
   });
 
   const mp3Input = useRef(null);
-  const imageInput = useRef(null);
+  // might not want to upload an image 
+  // const imageInput = useRef(null);
   const history = useHistory();
 
   const { title, content, mp3, image } = beatData;
@@ -65,7 +67,7 @@ const BeatCreateForm = () => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("mp3", mp3);
-    formData.append("image", imageInput.current.files[0]);
+    // formData.append("image", imageInput.current.files[0]);
 
     try {
       const { data } = await axios.post("/beats/", formData);
@@ -109,6 +111,7 @@ const BeatCreateForm = () => {
           {message}
         </Alert>
       ))}
+     
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => {}}
@@ -128,7 +131,7 @@ const BeatCreateForm = () => {
           <Container
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
-            <Form.Group className="text-center">
+            {/* <Form.Group className="text-center">
               {image ? (
                 <>
                   <figure>
@@ -165,8 +168,16 @@ const BeatCreateForm = () => {
               <Alert variant="warning" key={idx}>
                 {message}
               </Alert>
-            ))}
+            ))} */}
+           
+             {/* <figure>
+              <Image className={appStyles.musicImage} src={musicImage} rounded />
+            </figure> */}
+
+            <Image className={`${appStyles.musicImage} ${appStyles.smallImage}`}  src={musicImage}  rounded />
+
             <Form.Group className="text-center">
+             
               {mp3 ? (
                 <>
                   <div>
@@ -213,3 +224,4 @@ const BeatCreateForm = () => {
 }
 
 export default BeatCreateForm;
+        
