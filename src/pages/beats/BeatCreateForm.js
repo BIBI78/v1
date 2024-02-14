@@ -14,9 +14,10 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Alert from 'react-bootstrap/Alert';
 
-function BeatCreateForm() {
+const BeatCreateForm = () => {
    // eslint-disable-next-line
   const [errors, setErrors] = useState({});
+  console.log("form component rendered")
 
   const [beatData, setBeatData] = useState({
     title: "",

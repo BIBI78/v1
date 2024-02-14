@@ -62,11 +62,11 @@ function App() {
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           {/* might need to take out this mp3 route */}
-          <Route exact path="/mp3s/create" render={() => <Mp3CreateForm />} />
+          {/* <Route exact path="/mp3s/create" render={() => <Mp3CreateForm />} /> */}
           <Route exact path="/profiles/:id" render={() => <ProfilePage />} />
          <Route exact path="/beats/:id" render={() => <BeatPage />} />
           <Route exact path="/beats/:id/edit" render={() => <BeatEditForm />} />
-          <Route exact path="/beats/create" render={() => <BeatCreateForm />} />
+          <Route exact path="/mybeats/create" render={() => <BeatCreateForm/>} />
           
           
           <Route

@@ -55,7 +55,7 @@ const NavBar = () => {
     <NavLink
       className={styles.NavLink}
       activeClassName={styles.Active}
-      to="/beats/create" 
+      to="/mybeats/create" 
     >
       <i className="far fa-file-audio"></i>Upload Beats
     </NavLink>
