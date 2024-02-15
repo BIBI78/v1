@@ -1,12 +1,18 @@
-import React from "react";
+// import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/Beat.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
-import { axiosRes } from "../../api/axiosDefaults";
+// import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
 import musicImage from "../../assets/music.jpg";
+
+import star from "../../styles/Star.module.css";
+// import StarRating from 'react-simple-star-rating';
+import { Rating } from "react-simple-star-rating";
+import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 
 const Beat = (props) => {
   const {
@@ -19,7 +25,7 @@ const Beat = (props) => {
     like_id,
     title,
     content,
-    image,
+    // image,
     updated_at,
     beatPage,
     setBeats,
@@ -31,6 +37,11 @@ const Beat = (props) => {
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
+
+  // RATING 
+  const [averageRating, setAverageRating] = useState(0);
+  // const [showModal, setShowModal] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const handleEdit = () => {
     history.push(`/beats/${id}/edit`);
@@ -77,6 +88,42 @@ const Beat = (props) => {
       console.log(err);
     }
   };
+
+  //  RATING
+
+    useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [{ data: ratingsData }] = await Promise.all([
+          axiosReq.get(`/rating/`),
+        ]);
+
+        const ratingsForBeat = ratingsData.results.filter(
+          (rating) => rating.beat === parseInt(id)
+        );
+        const totalRatings = ratingsForBeat.reduce(
+          (acc, rating) => acc + rating.rating,
+          0
+        );
+        const averageRating = ratingsForBeat.length
+          ? totalRatings / ratingsForBeat.length
+          : 0;
+
+        setAverageRating(averageRating);
+        setHasLoaded(true);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+          setHasLoaded(false);
+    const timer = setTimeout(() => {
+      fetchData();
+    }, [id]);
+
+    return () => clearTimeout(timer);
+    }, [id]);
+  
+// 
 
   return (
     <Card className={styles.Beat}>
@@ -150,6 +197,21 @@ const Beat = (props) => {
           </Link>
           {comments_count}
         </div>
+           <span className="float-right">
+          {hasLoaded ? (
+            <>
+              <Rating
+                className={star.Star}
+                readonly
+                initialValue={averageRating.toFixed(1)}
+                size={25}
+              />
+              {averageRating.toFixed(1)}
+            </>
+          ) : (
+            "Loading rating..."
+          )}
+        </span>
       </Card.Body>
     </Card>
   );

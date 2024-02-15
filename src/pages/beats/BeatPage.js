@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
-
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-
 import appStyles from "../../App.module.css";
 import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import Beat from "./Beat";
 import Comment from "../comments/Comment";
-
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
-
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../components/Asset";
 import { fetchMoreData } from "../../utils/utils";
+import BeatRatingForm from "./BeatRatingForm";
 
 function BeatPage() {
   const { id } = useParams();
   const [beat, setBeat] = useState({ results: [] });
-
   const currentUser = useCurrentUser();
   const profile_image = currentUser?.profile_image;
   const [comments, setComments] = useState({ results: [] });
+  const [averageRating, setAverageRating] = useState(0);
+  const owner = beat.results[0]?.owner;
 
   useEffect(() => {
     const handleMount = async () => {
@@ -33,15 +31,20 @@ function BeatPage() {
           axiosReq.get(`/comments/?beat=${id}`),
         ]);
         setBeat({ results: [beat] });
-        console.log(beat)
         setComments(comments);
       } catch (err) {
         console.log(err);
       }
     };
-
     handleMount();
   }, [id]);
+
+  const updateAverageRating = (newRating) => {
+    const totalRatings = averageRating * beat.results[0].ratings_count;
+    const newAverageRating =
+      (totalRatings + newRating.rating) / beat.results[0].ratings_count;
+    setAverageRating(newAverageRating);
+  };
 
   return (
     <Row className="h-100">
@@ -50,13 +53,32 @@ function BeatPage() {
         <Beat {...beat.results[0]} setBeats={setBeat} beatPage />
         <Container className={appStyles.Content}>
           {currentUser ? (
-            <CommentCreateForm
-              profile_id={currentUser.profile_id}
-              profileImage={profile_image}
-              beat={id}
-              setBeat={setBeat}
-              setComments={setComments}
-            />
+            <>
+              <CommentCreateForm
+                profile_id={currentUser.profile_id}
+                profileImage={profile_image}
+                beat={id}
+                setBeat={setBeat}
+                averageRating={averageRating.toFixed(2)}
+                setComments={setComments}
+              />
+              <Container className={`mb-3 ${appStyles.Content}`}>
+                {currentUser && currentUser.profile_id ? (
+                  <BeatRatingForm
+                    profile_id={currentUser.profile_id}
+                    post={id}
+                    id={id}
+                    owner={owner}
+                    setBeat={setBeat}
+                    currentUser={currentUser}
+                    averageRating={averageRating.toFixed(2)}
+                    updateAverageRating={updateAverageRating}
+                  />
+                ) : (
+                  <div>Create an account or login to rate the post.</div>
+                )}
+              </Container>
+            </>
           ) : comments.results.length ? (
             "Comments"
           ) : null}
@@ -78,7 +100,7 @@ function BeatPage() {
           ) : currentUser ? (
             <span>No comments yet, be the first to comment!</span>
           ) : (
-            <span>No comments... yet</span>
+            <span>No comments yet.</span>
           )}
         </Container>
       </Col>
@@ -90,3 +112,4 @@ function BeatPage() {
 }
 
 export default BeatPage;
+
