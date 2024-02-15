@@ -32,6 +32,7 @@ const BeatCreateForm = () => {
   // const imageInput = useRef(null);
   const history = useHistory();
 
+// eslint-disable-next-line 
   const { title, content, mp3, image } = beatData;
 
   const handleChange = (event) => {
@@ -41,15 +42,15 @@ const BeatCreateForm = () => {
     });
   };
 
-  const handleChangeImage = (event) => {
-    if (event.target.files.length) {
-      URL.revokeObjectURL(image);
-      setBeatData({
-        ...beatData,
-        image: URL.createObjectURL(event.target.files[0]),
-      });
-    }
-  };
+  // const handleChangeImage = (event) => {
+  //   if (event.target.files.length) {
+  //     URL.revokeObjectURL(image);
+  //     setBeatData({
+  //       ...beatData,
+  //       image: URL.createObjectURL(event.target.files[0]),
+  //     });
+  //   }
+  // };
 
   const handleChangeMp3 = (event) => {
     if (event.target.files.length) {

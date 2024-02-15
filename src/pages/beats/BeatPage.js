@@ -75,7 +75,7 @@ function BeatPage() {
                     updateAverageRating={updateAverageRating}
                   />
                 ) : (
-                  <div>Create an account or login to rate the post.</div>
+                  <div> login to rate the beat.</div>
                 )}
               </Container>
             </>
