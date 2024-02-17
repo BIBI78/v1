@@ -65,8 +65,9 @@ function BeatPage() {
               <Container className={`mb-3 ${appStyles.Content}`}>
                 {currentUser && currentUser.profile_id ? (
                   <BeatRatingForm
+                    // double id ???
                     profile_id={currentUser.profile_id}
-                    post={id}
+                    beat={id}
                     id={id}
                     owner={owner}
                     setBeat={setBeat}
