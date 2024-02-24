@@ -2,3 +2,9 @@
     color: rgb(0, 0, 0);
     font-size: medium;
 }
+
+/* star.module.css */
+.simple-star-rating .rsr-star {
+    color: #00ff00;
+    /* Change to your desired shade of green */
+}

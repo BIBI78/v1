@@ -197,14 +197,16 @@ const Beat = (props) => {
           </Link>
           {comments_count}
         </div>
-           <span className="float-right">
+           <span className="float-right star.Star">
           {hasLoaded ? (
             <>
               <Rating
                 className={star.Star}
+                // className="custom-rating"
                 readonly
                 initialValue={averageRating.toFixed(1)}
                 size={25}
+                 style={{ color: '#00ff00' }}
               />
               {averageRating.toFixed(1)}
             </>
