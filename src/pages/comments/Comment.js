@@ -17,7 +17,7 @@ const Comment = (props) => {
     updated_at,
     content,
     id,
-    setPost,
+    setBeat,
     setComments,
   } = props;
 
@@ -28,11 +28,11 @@ const Comment = (props) => {
   const handleDelete = async () => {
     try {
       await axiosRes.delete(`/comments/${id}/`);
-      setPost((prevPost) => ({
+      setBeat((prevBeat) => ({
         results: [
           {
-            ...prevPost.results[0],
-            comments_count: prevPost.results[0].comments_count - 1,
+            ...prevBeat.results[0],
+            comments_count: prevBeat.results[0].comments_count - 1,
           },
         ],
       }));
