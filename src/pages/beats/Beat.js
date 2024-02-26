@@ -201,12 +201,13 @@ const Beat = (props) => {
           {hasLoaded ? (
             <>
               <Rating
+                // className={`custom-rating ${star.Star}`}
                 className={star.Star}
                 // className="custom-rating"
                 readonly
                 initialValue={averageRating.toFixed(1)}
                 size={25}
-                 style={{ color: '#00ff00' }}
+                style={{ color: '#00ff00' }}
               />
               {averageRating.toFixed(1)}
             </>

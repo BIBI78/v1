@@ -8,6 +8,7 @@ import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import btnStyles from "../../styles/Button.module.css";
 import styles from "../../styles/Modal.module.css";
 
+
 function BeatRatingForm(props) {
   const { beat, setBeat, id, owner } = props;
   const [rating, setRating] = useState(0);
@@ -79,7 +80,7 @@ function BeatRatingForm(props) {
       // Get the filled icons container element
       const filledIcons = element.querySelector('.style-module_fillIcons__6---A');
       // Set the color of the filled icons to green
-      filledIcons.style.color = '#00ff00';
+      filledIcons.style.color = 'rgb(11 255 14)';
     });
   }, []);
 

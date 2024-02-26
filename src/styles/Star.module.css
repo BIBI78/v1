@@ -3,8 +3,44 @@
     font-size: medium;
 }
 
-/* star.module.css */
-.simple-star-rating .rsr-star {
+
+.filled-icons {
+    color: green;
+    /* Change 'red' to the desired color */
+}
+
+.style-module_fillIcons__6---A.filled-icons {
+    color: green;
+}
+
+.custom-rating {
     color: #00ff00;
-    /* Change to your desired shade of green */
+    /* Change the color here */
+}
+
+.span.style-module_fillIcons__6---A.filled-icons{
+    color: #00ff00;
+
+}
+.style-module_fillIcons__6---A.filled-icons {
+    /* Your styles here */
+    color: #00ff00;
+}
+
+.star.Star {
+    /* Your styles for the stars */
+    /* For example: */
+    color: blue;
+    /* Change color */
+    font-size: 20px;
+    /* Change size */
+}
+
+.star-svg{
+    color: green;
+}
+
+.style-module_fillIcons__6---A.filled-icons{
+
+    color: green;
 }
