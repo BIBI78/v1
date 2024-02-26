@@ -113,4 +113,3 @@ function BeatPage() {
 }
 
 export default BeatPage;
-
