@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Assuming you're using axios for HTTP requests
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import appStyles from "../../styles/BeatFeedbackForm.module.css";
 
 const BeatFeedbackForm = ({ beatId }) => {
   const [feedback, setFeedback] = useState({
@@ -74,7 +75,7 @@ const BeatFeedbackForm = ({ beatId }) => {
           <span>{feedbackCounts.loop}</span>
         </span>
         {/* Add more icons as needed */}
-        <button type="submit">Submit Feedback</button>
+       <button type="submit" className={appStyles.submitButton}>  Submit Feedback</button>
       </form>
     </div>
   );
