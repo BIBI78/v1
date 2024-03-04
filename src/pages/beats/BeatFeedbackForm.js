@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Assuming you're using axios for HTTP requests
-import { useCurrentUser } from "../../contexts/CurrentUserContext";
+
 import appStyles from "../../styles/BeatFeedbackForm.module.css";
+
+//  hmmm
+// eslint-disable-next-line no-unused-vars
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
+// eslint-disable-next-line no-unused-vars
+import { axiosRes, axiosReq } from "../../api/axiosDefaults";
+
 
 const BeatFeedbackForm = ({ beatId }) => {
   const [feedback, setFeedback] = useState({
@@ -38,17 +45,18 @@ const BeatFeedbackForm = ({ beatId }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post(`/api/beats/${beatId}/feedback/`, feedback);
-      console.log('Feedback submitted:', response.data);
-      // Optionally, update UI or show a success message
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
-      // Handle error, e.g., show an error message to the user
-    }
-  };
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  try {
+    console.log('Sending feedback data:', feedback);
+    const response = await axios.post(`/api/beats/${beatId}/feedback/`, feedback);
+    console.log('Feedback submitted:', response.data);
+    // Optionally, update UI or show a success message
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    // Handle error, e.g., show an error message to the user
+  }
+};
 
   return (
     <div>

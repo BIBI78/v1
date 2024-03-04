@@ -23,14 +23,14 @@ span {
 }
 
 .active {
-    color: blue;
+    color: rgb(21, 255, 0);
     /* Adjust color as needed */
 }
 
 .submitButton {
     margin-top: 10px;
     /* Adjust margin as needed */
-    background-color: blue;
+    background-color: rgba(128, 128, 128, 0.397);
     /* Adjust background color as needed */
     color: white;
     /* Adjust text color as needed */
@@ -42,6 +42,6 @@ span {
 }
 
 .submitButton:hover {
-    background-color: darkblue;
+    background-color: neon rgb(6, 251, 43);
     /* Adjust hover background color as needed */
 }

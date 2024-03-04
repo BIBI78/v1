@@ -187,7 +187,7 @@ const Beat = (props) => {
                 readonly
                 initialValue={averageRating.toFixed(1)}
                 size={25}
-                style={{ color: "#00ff00" }}
+                // style={{ color: "#00ff00" }}
                 fillColor="#00ff00"
               />
               {averageRating.toFixed(1)}
