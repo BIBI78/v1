@@ -49,7 +49,9 @@ const handleSubmit = async (event) => {
   event.preventDefault();
   try {
     console.log('Sending feedback data:', feedback);
-    const response = await axios.post(`/api/beats/${beatId}/feedback/`, feedback);
+    // const response = await axios.post(`/api/beats/${beatId}/feedback/`, feedback);
+    const response = await axios.post("/feedback/");
+
     console.log('Feedback submitted:', response.data);
     // Optionally, update UI or show a success message
   } catch (error) {
