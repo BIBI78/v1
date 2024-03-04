@@ -1,15 +1,6 @@
-// src/components/BeatFeedbackForm.js
-
 import React, { useState } from 'react';
 import axios from 'axios'; // Assuming you're using axios for HTTP requests
-// new imports 
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
-import btnStyles from "../../styles/Button.module.css";
-import styles from "../../styles/Modal.module.css";
-import React, { useEffect, useState } from "react";
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 
 const BeatFeedbackForm = ({ beatId }) => {
   const [feedback, setFeedback] = useState({
@@ -21,9 +12,29 @@ const BeatFeedbackForm = ({ beatId }) => {
     // Add other feedback fields as needed
   });
 
-  const handleInputChange = (event) => {
-    const { name, checked } = event.target;
-    setFeedback({ ...feedback, [name]: checked });
+  const [feedbackCounts, setFeedbackCounts] = useState({
+    fire: 0,
+    cold: 0,
+    hard: 0,
+    trash: 0,
+    loop: 0,
+    // Add other feedback fields as needed
+  });
+
+  const handleIconClick = (fieldName) => {
+    setFeedback({ ...feedback, [fieldName]: !feedback[fieldName] });
+
+    if (!feedback[fieldName]) {
+      setFeedbackCounts((prevCounts) => ({
+        ...prevCounts,
+        [fieldName]: prevCounts[fieldName] + 1,
+      }));
+    } else {
+      setFeedbackCounts((prevCounts) => ({
+        ...prevCounts,
+        [fieldName]: prevCounts[fieldName] - 1,
+      }));
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -42,27 +53,27 @@ const BeatFeedbackForm = ({ beatId }) => {
     <div>
       <h2>Provide Feedback</h2>
       <form onSubmit={handleSubmit}>
-        <label>
-          Fire:
-          <input type="checkbox" name="fire" checked={feedback.fire} onChange={handleInputChange} />
-        </label>
-        <label>
-          Cold:
-          <input type="checkbox" name="cold" checked={feedback.cold} onChange={handleInputChange} />
-        </label>
-        <label>
-          Hard:
-          <input type="checkbox" name="hard" checked={feedback.hard} onChange={handleInputChange} />
-        </label>
-        <label>
-          Trash:
-          <input type="checkbox" name="trash" checked={feedback.trash} onChange={handleInputChange} />
-        </label>
-        <label>
-          Loop:
-          <input type="checkbox" name="loop" checked={feedback.loop} onChange={handleInputChange} />
-        </label>
-        {/* Add more fields as needed */}
+        <span onClick={() => handleIconClick('fire')}>
+          <i className={`fas fa-fire ${feedback.fire ? 'active' : ''}`}></i>
+          <span>{feedbackCounts.fire}</span>
+        </span>
+        <span onClick={() => handleIconClick('cold')}>
+          <i className={`fas fa-snowflake ${feedback.cold ? 'active' : ''}`}></i>
+          <span>{feedbackCounts.cold}</span>
+        </span>
+        <span onClick={() => handleIconClick('hard')}>
+          <i className={`fas fa-bolt ${feedback.hard ? 'active' : ''}`}></i>
+          <span>{feedbackCounts.hard}</span>
+        </span>
+        <span onClick={() => handleIconClick('trash')}>
+          <i className={`fas fa-trash-alt ${feedback.trash ? 'active' : ''}`}></i>
+          <span>{feedbackCounts.trash}</span>
+        </span>
+        <span onClick={() => handleIconClick('loop')}>
+          <i className={`fas fa-redo-alt ${feedback.loop ? 'active' : ''}`}></i>
+          <span>{feedbackCounts.loop}</span>
+        </span>
+        {/* Add more icons as needed */}
         <button type="submit">Submit Feedback</button>
       </form>
     </div>
@@ -70,3 +81,4 @@ const BeatFeedbackForm = ({ beatId }) => {
 };
 
 export default BeatFeedbackForm;
+

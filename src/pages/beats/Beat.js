@@ -1,18 +1,18 @@
-// import React from "react";
+// src/components/Beat.js
+
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/Beat.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
-// import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
 import musicImage from "../../assets/music.jpg";
-
 import star from "../../styles/Star.module.css";
-// import StarRating from 'react-simple-star-rating';
 import { Rating } from "react-simple-star-rating";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
+import BeatFeedbackForm from "./BeatFeedbackForm"; // Import BeatFeedbackForm component
+
 
 const Beat = (props) => {
   const {
@@ -25,22 +25,18 @@ const Beat = (props) => {
     like_id,
     title,
     content,
-    // image,
     updated_at,
     beatPage,
     setBeats,
     mp3,
     mp3_url
-
   } = props;
 
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
 
-  // RATING 
   const [averageRating, setAverageRating] = useState(0);
-  // const [showModal, setShowModal] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   const handleEdit = () => {
@@ -58,7 +54,6 @@ const Beat = (props) => {
 
   const handleLike = async () => {
     try {
-      //  might be a probem with axios beat , shopould be post?
       const { data } = await axiosRes.post("/likes/", { beat: id });
       setBeats((prevBeats) => ({
         ...prevBeats,
@@ -69,7 +64,7 @@ const Beat = (props) => {
         }),
       }));
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   };
 
@@ -89,9 +84,7 @@ const Beat = (props) => {
     }
   };
 
-  //  RATING
-
-    useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const [{ data: ratingsData }] = await Promise.all([
@@ -112,18 +105,17 @@ const Beat = (props) => {
         setAverageRating(averageRating);
         setHasLoaded(true);
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     };
-          setHasLoaded(false);
+
+    setHasLoaded(false);
     const timer = setTimeout(() => {
       fetchData();
     }, [id]);
 
     return () => clearTimeout(timer);
-    }, [id]);
-  
-// 
+  }, [id]);
 
   return (
     <Card className={styles.Beat}>
@@ -145,23 +137,14 @@ const Beat = (props) => {
         </Media>
       </Card.Body>
       <Link to={`/beats/${id}`}>
-        {/* <Card.Img src={image} alt={title} /> */}
         <Card.Img src={musicImage} alt={title} />
         {mp3 && (
-        <audio controls className={styles.Audio}>
-          <source src={mp3_url} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-      )}
+          <audio controls className={styles.Audio}>
+            <source src={mp3_url} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        )}
       </Link>
-      {/* MP3 */}
-
-       {/* {mp3 && (
-        <audio controls className={styles.Audio}>
-          <source src={mp3} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-      )} */}
 
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
@@ -169,8 +152,7 @@ const Beat = (props) => {
         <div className={styles.beatBar}>
           {is_owner ? (
             <OverlayTrigger
-                          placement="top"
-                        //   gotta change this
+              placement="top"
               overlay={<Tooltip>You can't like your own beat!</Tooltip>}
             >
               <i className="far fa-heart" />
@@ -186,7 +168,7 @@ const Beat = (props) => {
           ) : (
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>Log in to like beatss!</Tooltip>}
+              overlay={<Tooltip>Log in to like beats!</Tooltip>}
             >
               <i className="far fa-heart" />
             </OverlayTrigger>
@@ -197,19 +179,16 @@ const Beat = (props) => {
           </Link>
           {comments_count}
         </div>
-           <span className="float-right star.Star">
+        <span className="float-right star.Star">
           {hasLoaded ? (
             <>
               <Rating
-                // className={`custom-rating ${star.Star}`}
                 className={star.Star}
-                // className="custom-rating"
                 readonly
                 initialValue={averageRating.toFixed(1)}
                 size={25}
-                style={{ color: '#00ff00' }}
-                fillColor= { '#00ff00' }
-
+                style={{ color: "#00ff00" }}
+                fillColor="#00ff00"
               />
               {averageRating.toFixed(1)}
             </>
@@ -217,6 +196,8 @@ const Beat = (props) => {
             "Loading rating..."
           )}
         </span>
+        {/* Render BeatFeedbackForm component */}
+        <BeatFeedbackForm beatId={id} />
       </Card.Body>
     </Card>
   );
