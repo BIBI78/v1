@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Assuming you're using axios for HTTP requests
-
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 import appStyles from "../../styles/BeatFeedbackForm.module.css";
-
-//  hmmm
-// eslint-disable-next-line no-unused-vars
-import { useCurrentUser } from "../../contexts/CurrentUserContext";
-// eslint-disable-next-line no-unused-vars
-import { axiosRes, axiosReq } from "../../api/axiosDefaults";
-
 
 const BeatFeedbackForm = ({ beatId }) => {
   const [feedback, setFeedback] = useState({
@@ -17,7 +10,6 @@ const BeatFeedbackForm = ({ beatId }) => {
     hard: false,
     trash: false,
     loop: false,
-    // Add other feedback fields as needed
   });
 
   const [feedbackCounts, setFeedbackCounts] = useState({
@@ -26,39 +18,37 @@ const BeatFeedbackForm = ({ beatId }) => {
     hard: 0,
     trash: 0,
     loop: 0,
-    // Add other feedback fields as needed
   });
 
-  const handleIconClick = (fieldName) => {
-    setFeedback({ ...feedback, [fieldName]: !feedback[fieldName] });
+  const history = useHistory();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('fire', feedback.fire ? 'true' : 'false');
+      formData.append('cold', feedback.cold ? 'true' : 'false');
+      formData.append('hard', feedback.hard ? 'true' : 'false');
+      formData.append('trash', feedback.trash ? 'true' : 'false');
+      formData.append('loop', feedback.loop ? 'true' : 'false');
 
-    if (!feedback[fieldName]) {
-      setFeedbackCounts((prevCounts) => ({
-        ...prevCounts,
-        [fieldName]: prevCounts[fieldName] + 1,
-      }));
-    } else {
-      setFeedbackCounts((prevCounts) => ({
-        ...prevCounts,
-        [fieldName]: prevCounts[fieldName] - 1,
-      }));
+      const { data } = await axios.post("/feedback/", formData);
+      history.push(`/beats/${data.id}`);
+      
+    } catch (err) {
+      console.log(err);
+      if (err.response?.status !== 401) {
+        // Handle errors
+      }
     }
   };
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  try {
-    console.log('Sending feedback data:', feedback);
-    // const response = await axios.post(`/api/beats/${beatId}/feedback/`, feedback);
-    const response = await axios.post("/feedback/");
-
-    console.log('Feedback submitted:', response.data);
-    // Optionally, update UI or show a success message
-  } catch (error) {
-    console.error('Error submitting feedback:', error);
-    // Handle error, e.g., show an error message to the user
-  }
-};
+  const handleIconClick = (fieldName) => {
+    setFeedback({ ...feedback, [fieldName]: !feedback[fieldName] });
+    setFeedbackCounts((prevCounts) => ({
+      ...prevCounts,
+      [fieldName]: feedback[fieldName] ? prevCounts[fieldName] - 1 : prevCounts[fieldName] + 1,
+    }));
+  };
 
   return (
     <div>
@@ -84,7 +74,7 @@ const handleSubmit = async (event) => {
           <i className={`fas fa-redo-alt ${feedback.loop ? 'active' : ''}`}></i>
           <span>{feedbackCounts.loop}</span>
         </span>
-        {/* Add more icons as needed */}
+        
        <button type="submit" className={appStyles.submitButton}>  Submit Feedback</button>
       </form>
     </div>
@@ -92,4 +82,3 @@ const handleSubmit = async (event) => {
 };
 
 export default BeatFeedbackForm;
-
