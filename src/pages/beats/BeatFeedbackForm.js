@@ -30,7 +30,8 @@ const BeatFeedbackForm = ({ beatId }) => {
       formData.append('hard', feedback.hard ? 'true' : 'false');
       formData.append('trash', feedback.trash ? 'true' : 'false');
       formData.append('loop', feedback.loop ? 'true' : 'false');
-      formData.append('beat', beatId) 
+      formData.append('beat', beatId);
+      console.log('beatId:', beatId);
 
 
       const { data } = await axios.post("/feedback/", formData);

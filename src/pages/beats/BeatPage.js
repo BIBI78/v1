@@ -29,6 +29,7 @@ function BeatPage() {
         const [{ data: beat }, { data: comments }] = await Promise.all([
           axiosReq.get(`/beats/${id}/`),
           axiosReq.get(`/comments/?beat=${id}`),
+      
         ]);
         setBeat({ results: [beat] });
         setComments(comments);
