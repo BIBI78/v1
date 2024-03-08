@@ -54,8 +54,8 @@ const BeatFeedbackForm = ({ beatId }) => {
   };
 
   return (
-    <div>
-      <h2>Provide Feedback</h2>
+    <div className="feedback-form" >
+      <h2 className="feedback-title"> Provide Feedback</h2>
       <form onSubmit={handleSubmit}>
         <span onClick={() => handleIconClick('fire')}>
           <i className={`fas fa-fire ${feedback.fire ? 'active' : ''}`}></i>

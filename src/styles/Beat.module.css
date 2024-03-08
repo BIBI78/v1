@@ -4,6 +4,11 @@
     border-radius: 2px;
     margin-bottom: 16px;
     text-align: center;
+    /* new */
+    /* font-family: 'Times New Roman', Times, serif; */
+    /* OBVIOUSLTY NOT WORkiNG */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: 700;
 }
 
 .Beat figure,
@@ -22,4 +27,10 @@ h5 {
 .HeartOutline:hover {
     color: #f85032;
 }
+
+
+/* .feedback-form {
+    float: left;
+    margin-left: -10px;
+} */
 

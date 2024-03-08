@@ -188,7 +188,8 @@ const Beat = (props) => {
                 initialValue={averageRating.toFixed(1)}
                 size={25}
                 // style={{ color: "#00ff00" }}
-                fillColor="#00ff00"
+                // COME BACK HERE
+                // fillColor="#00ff00"
               />
               {averageRating.toFixed(1)}
             </>
@@ -196,8 +197,10 @@ const Beat = (props) => {
             "Loading rating..."
           )}
         </span>
+        <span className="float-left" >
         {/* Render BeatFeedbackForm component */}
-        <BeatFeedbackForm beatId={id} />
+          <BeatFeedbackForm beatId={id} />
+          </span>
       </Card.Body>
     </Card>
   );

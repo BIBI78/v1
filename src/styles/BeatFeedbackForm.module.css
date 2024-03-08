@@ -23,7 +23,7 @@ span {
 }
 
 .active {
-    color: rgb(21, 255, 0);
+    color: #2142b2;
     /* Adjust color as needed */
 }
 
@@ -42,6 +42,23 @@ span {
 }
 
 .submitButton:hover {
-    background-color: neon rgb(6, 251, 43);
+    color: #2142b2;
     /* Adjust hover background color as needed */
+}
+
+/* .feedback-form {
+    margin-left: -10px;
+} */
+
+.feedback-form{
+    font-weight: 700;
+    margin-left: auto;
+    font-size: 1.2rem;
+}
+
+
+.feedback-title {
+    font-weight: 700;
+    float: left;
+    font-size: 1.2rem;
 }
