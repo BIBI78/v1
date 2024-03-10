@@ -17,8 +17,18 @@ h5 {
 }
 
 .Heart {
-    color: #f85032;
+    font-weight: 400;
+    font-size: 5.9rem;
+    color: red;
 }
+
+.Comment{
+    font-weight: 400;
+    font-size: 5.9rem;
+    color: blue
+
+}
+
 
 .Heart:hover {
     color: grey;
@@ -29,8 +39,28 @@ h5 {
 }
 
 
-/* .feedback-form {
+
+
+.beatBar{
     float: left;
-    margin-left: -10px;
+    padding-bottom: auto;
+    font-weight: 400;
+    /* font-size: 5.9rem; */
+}
+
+
+
+.Beat_beatBar__tz5gO {
+    font-weight: 400;
+    font-size: 5.9rem;
+   
+
+}
+
+
+
+/* .far.fa-heart {
+    font-weight: 400;
+    font-size: 5.9rem;
 } */
 

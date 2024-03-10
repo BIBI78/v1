@@ -155,11 +155,12 @@ const Beat = (props) => {
               placement="top"
               overlay={<Tooltip>You can't like your own beat!</Tooltip>}
             >
+              
               <i className="far fa-heart" />
             </OverlayTrigger>
           ) : like_id ? (
             <span onClick={handleUnlike}>
-              <i className={`fas fa-heart ${styles.Heart}`} />
+              <i className={`far fa-heart ${styles.Heart}`} />
             </span>
           ) : currentUser ? (
             <span onClick={handleLike}>
@@ -171,14 +172,16 @@ const Beat = (props) => {
               overlay={<Tooltip>Log in to like beats!</Tooltip>}
             >
               <i className="far fa-heart" />
-            </OverlayTrigger>
+                  </OverlayTrigger>
+                  
           )}
           {likes_count}
           <Link to={`/beats/${id}`}>
-            <i className="far fa-comments" />
+            <i className={`far fa-comments ${styles.Comment}`}  />
           </Link>
           {comments_count}
-        </div>
+          </div>
+        
         <span className="float-right star.Star">
           {hasLoaded ? (
             <>
