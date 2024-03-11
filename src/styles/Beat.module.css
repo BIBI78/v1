@@ -29,15 +29,37 @@ h5 {
 
 }
 
+.HeartOutline {
+    color: #f85032;
+    font-size: 5.9rem;
+}
 
 .Heart:hover {
-    color: grey;
+    /* color: grey; */
+    color: #f85032;
+    font-size: 5.9rem;
 }
 
 .HeartOutline:hover {
     color: #f85032;
+    font-size: 5.9rem;
 }
 
+.CommentOutline {
+    color: #f85032;
+    font-size: 5.9rem;
+}
+
+.Comment:hover {
+    /* color: grey; */
+    color: #f85032;
+    font-size: 5.9rem;
+}
+
+.CommentOutline:hover {
+    color: #f85032;
+    font-size: 5.9rem;
+}
 
 
 
@@ -45,22 +67,14 @@ h5 {
     float: left;
     padding-bottom: auto;
     font-weight: 400;
-    /* font-size: 5.9rem; */
+    font-size: 5.9rem;
+    
 }
 
 
 
-.Beat_beatBar__tz5gO {
-    font-weight: 400;
+far.fa.heart{
     font-size: 5.9rem;
-   
-
+    
 }
-
-
-
-/* .far.fa-heart {
-    font-weight: 400;
-    font-size: 5.9rem;
-} */
 
