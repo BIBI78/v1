@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import appStyles from "../../styles/BeatFeedbackForm.module.css";
+import styles from "../../styles/Beat.module.css";
 
 const BeatFeedbackForm = ({ beatId }) => {
   const [feedback, setFeedback] = useState({
@@ -58,23 +59,25 @@ const BeatFeedbackForm = ({ beatId }) => {
       {/* <h2 className="feedback-title"> Provide Feedback</h2> */}
       <form onSubmit={handleSubmit}>
         <span onClick={() => handleIconClick('fire')}>
-          <i className={`fas fa-fire ${feedback.fire ? 'active' : ''}`}></i>
+           {/*  */}
+          {/* <i className={`fas fa-fire ${feedback.fire ? 'active' : ''}`}></i> */}
+          <i className={`fas fa-fire ${feedback.fire ? 'active' : ''} ${styles.iconFire}`}></i>
           <span>{feedbackCounts.fire}</span>
         </span>
         <span onClick={() => handleIconClick('cold')}>
-          <i className={`fas fa-snowflake ${feedback.cold ? 'active' : ''}`}></i>
+          <i className={`fas fa-snowflake ${feedback.cold ? 'active' : ''} ${styles.iconSnowflake}`}></i>
           <span>{feedbackCounts.cold}</span>
         </span>
         <span onClick={() => handleIconClick('hard')}>
-          <i className={`fas fa-bolt ${feedback.hard ? 'active' : ''}`}></i>
+          <i className={`fas fa-bolt ${feedback.hard ? 'active' : ''}${styles.iconBolt}`}></i>
           <span>{feedbackCounts.hard}</span>
         </span>
         <span onClick={() => handleIconClick('trash')}>
-          <i className={`fas fa-trash-alt ${feedback.trash ? 'active' : ''}`}></i>
+          <i className={`fas fa-trash-alt ${feedback.trash ? 'active' : ''}${styles.iconTrash}`}></i>
           <span>{feedbackCounts.trash}</span>
         </span>
         <span onClick={() => handleIconClick('loop')}>
-          <i className={`fas fa-redo-alt ${feedback.loop ? 'active' : ''}`}></i>
+          <i className={`fas fa-redo-alt ${feedback.loop ? 'active' : ''}${styles.iconRedo}`}></i>
           <span>{feedbackCounts.loop}</span>
         </span>
         

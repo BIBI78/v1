@@ -63,8 +63,8 @@ span {
 .submitButton {
    
             margin-top: 10px;
-            background-color: rgba(128, 128, 128, 0.397);
-            color: grey;
+            background-color: white;
+            color: black;
             border: none;
             /* padding: 10px 20px; */
             border-radius: 5px;
@@ -76,9 +76,19 @@ span {
 
 
 .submitButton:hover {
-    color: black;
+    color: red;
     font-weight: 800;
+    font-size: 2.9rem;
     /* Adjust hover background color as needed */
 }
 
 
+.iconFire{
+
+}
+
+.iconFire:hover {
+    /* color: grey; */
+    color: #f85032;
+    font-size: 5.9rem;
+}

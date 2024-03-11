@@ -77,4 +77,52 @@ far.fa.heart{
     font-size: 5.9rem;
     
 }
+ /* FEEDBACK ICONS */
+.iconFire{
+    color:red;
+}
+.iconFire:hover {
+    /* color: grey; */
+    color: red;
+    font-size: 5.9rem;
+}
 
+.iconSnowflake {
+    color: blue;
+}
+
+.iconSnowflake:hover {
+    /* color: grey; */
+    color: red;
+    font-size: 5.9rem;
+}
+
+.iconBolt {
+    color: yellow;
+}
+
+.iconBolt:hover {
+    /* color: grey; */
+    color: red;
+    font-size: 5.9rem;
+}
+
+.iconTrash {
+    color: green;
+}
+
+.iconTrash:hover {
+    /* color: grey; */
+    color: red;
+    font-size: 5.9rem;
+}
+
+.iconRedo {
+    color: purple;
+}
+
+.iconRedo:hover {
+    /* color: grey; */
+    color: red;
+    font-size: 5.9rem;
+}
