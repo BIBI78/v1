@@ -27,25 +27,8 @@ span {
     /* Adjust color as needed */
 }
 
-/* .submitButton {
-    margin-top: 10px;
-    
-    background-color: rgba(128, 128, 128, 0.397);
-    
-    color: white;
-    
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-} */
 
 
-
-/* .feedback-form {
-    margin-left: -10px;
-} */
 
 .feedback-form{
     font-weight: 700;
@@ -79,17 +62,9 @@ span {
 .submitButton:hover {
     color: red;
     font-weight: 700;
-    font-size: 1.9rem;
+    font-size: 1.2rem;
     /* Adjust hover background color as needed */
 }
 
 
-.iconFire{
 
-}
-
-.iconFire:hover {
-    /* color: grey; */
-    color: #f85032;
-    font-size: 5.9rem;
-}

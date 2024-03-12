@@ -14,15 +14,7 @@ const NavBar = () => {
 
   const { expanded, setExpanded, ref } = useClickOutsideToggle();
 
-  // const handleSignOut = async () => {
-  //   try {
-  //     await axios.post("dj-rest-auth/logout/");
-  //     setCurrentUser(null);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-   const handleSignOut = async () => {
+  const handleSignOut = async () => {
     try {
       await axios.beat("dj-rest-auth/logout/");
       setCurrentUser(null);
@@ -31,45 +23,44 @@ const NavBar = () => {
     }
   };
 
-
-
- const addBeatIcon = (
-   <NavLink
-  className={styles.NavLink}
-  activeClassName={styles.Active}
-  to="/mybeats/create" 
->
-  <i className={`far fa-file-audio ${styles.navBarIcons}`}></i>Upload Beats
-</NavLink>
-
- );
+  const addBeatIcon = (
+    <NavLink
+      className={styles.NavLink}
+      activeClassName={styles.Active}
+      to="/mybeats/create" 
+    >
+      <i className={`far fa-file-audio ${styles.navBarIcons}`}></i>Upload Beats
+    </NavLink>
+  );
   
   const loggedInIcons = (
     <>
-     
-      <NavLink className={styles.navBarIcons}
-        activeClassName={styles.Active} to="/feed">
-  <i className={`fas fa-stream ${styles.navBarIcons}`}></i>Feed
-</NavLink>
+      <NavLink
+        className={styles.navBarIcons}
+        activeClassName={styles.Active}
+        to="/feed"
+      >
+        <i className={`fas fa-stream ${styles.navBarIcons}`}></i>Feed
+      </NavLink>
 
       <NavLink
         className={styles.navBarIcons}
         activeClassName={styles.Active}
         to="/liked"
       >
-        <i className={`fas fa-heart ${styles.navBarIcons}`}></i>
-Liked
-       </NavLink>
+        <i className={`fas fa-heart ${styles.navBarIcons}`}></i>Liked
+      </NavLink>
      
-      <NavLink className={`${styles.NavLink} ${styles.navBarIcons}`} to="/" onClick={handleSignOut}>
-  <i className={`fas fa-sign-out-alt ${styles.navBarIcons}`}></i>Sign out
-</NavLink>
-
-  
+      <NavLink 
+        className={`${styles.NavLink} ${styles.navBarIcons}`} 
+        to="/" 
+        onClick={handleSignOut}
+      >
+        <i className={`fas fa-sign-out-alt ${styles.navBarIcons}`}></i>Sign out
+      </NavLink>
 
       <NavLink
         className={styles.navBarIcons}
-        
         to={`/profiles/${currentUser?.profile_id}`}
       >
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
@@ -85,13 +76,15 @@ Liked
         to="/signin"
       >
         <i className={`fas fa-sign-in-alt ${styles.NavLink}  ${styles.navBarIcons}`}></i>Sign in
-
       </NavLink>
    
-      <NavLink to="/signup" className={styles.NavLink} activeClassName={styles.Active}>
-  <i className={`fas fa-user-plus ${styles.navBarIcons}`}></i>Sign up
-</NavLink>
-
+      <NavLink 
+        to="/signup" 
+        className={styles.NavLink} 
+        activeClassName={styles.Active}
+      >
+        <i className={`fas fa-user-plus ${styles.navBarIcons}`}></i>Sign up
+      </NavLink>
     </>
   );
 
@@ -109,15 +102,11 @@ Liked
           </Navbar.Brand>
         </NavLink>
         {currentUser && addBeatIcon} 
-        {/* {currentUser && addPostIcon} */}
-        {/* {mp3Icon} */}
-        {/* {addBeatIcon} */}
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
           aria-controls="basic-navbar-nav"
         />
-        
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
             <NavLink
@@ -130,7 +119,6 @@ Liked
             </NavLink>
             {currentUser ? loggedInIcons : loggedOutIcons}
           </Nav>
-          
         </Navbar.Collapse>
       </Container>
     </Navbar>
@@ -138,4 +126,3 @@ Liked
 };
 
 export default NavBar;
-
