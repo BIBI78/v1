@@ -31,57 +31,45 @@ const NavBar = () => {
     }
   };
 
-  // const addPostIcon = (
-  //   <NavLink
-  //     className={styles.NavLink}
-  //     activeClassName={styles.Active}
-  //     to="/posts/create"
-  //   >
-  //     <i className="far fa-plus-square"></i>Add post
-  //   </NavLink>
-  // );
 
-  // const mp3Icon = (
-  //   <NavLink
-  //     className={styles.NavLink}
-  //     activeClassName={styles.Active}
-  //     to="/mp3s/create" // Update the route to the correct path for MP3 upload
-  //   >
-  //     <i className="far fa-file-audio"></i>Upload MP3
-  //   </NavLink>
-  // );
 
  const addBeatIcon = (
-    <NavLink
-      className={styles.NavLink}
-      activeClassName={styles.Active}
-      to="/mybeats/create" 
-    >
-      <i className="far fa-file-audio"></i>Upload Beats
-    </NavLink>
+   <NavLink
+  className={styles.NavLink}
+  activeClassName={styles.Active}
+  to="/mybeats/create" 
+>
+  <i className={`far fa-file-audio ${styles.navBarIcons}`}></i>Upload Beats
+</NavLink>
+
  );
   
   const loggedInIcons = (
     <>
+     
+      <NavLink className={styles.navBarIcons}
+        activeClassName={styles.Active} to="/feed">
+  <i className={`fas fa-stream ${styles.navBarIcons}`}></i>Feed
+</NavLink>
+
       <NavLink
-        className={styles.NavLink}
-        activeClassName={styles.Active}
-        to="/feed"
-      >
-        <i className="fas fa-stream"></i>Feed
-      </NavLink>
-      <NavLink
-        className={styles.NavLink}
+        className={styles.navBarIcons}
         activeClassName={styles.Active}
         to="/liked"
       >
-        <i className="fas fa-heart"></i>Liked
-      </NavLink>
-      <NavLink className={styles.NavLink} to="/" onClick={handleSignOut}>
-        <i className="fas fa-sign-out-alt"></i>Sign out
-      </NavLink>
+        <i className={`fas fa-heart ${styles.navBarIcons}`}></i>
+Liked
+       </NavLink>
+     
+      <NavLink className={`${styles.NavLink} ${styles.navBarIcons}`} to="/" onClick={handleSignOut}>
+  <i className={`fas fa-sign-out-alt ${styles.navBarIcons}`}></i>Sign out
+</NavLink>
+
+  
+
       <NavLink
-        className={styles.NavLink}
+        className={styles.navBarIcons}
+        
         to={`/profiles/${currentUser?.profile_id}`}
       >
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
@@ -92,19 +80,18 @@ const NavBar = () => {
   const loggedOutIcons = (
     <>
       <NavLink
-        className={styles.NavLink}
+        className={styles.navBarIcons}
         activeClassName={styles.Active}
         to="/signin"
       >
-        <i className="fas fa-sign-in-alt"></i>Sign in
+        <i className={`fas fa-sign-in-alt ${styles.NavLink}  ${styles.navBarIcons}`}></i>Sign in
+
       </NavLink>
-      <NavLink
-        to="/signup"
-        className={styles.NavLink}
-        activeClassName={styles.Active}
-      >
-        <i className="fas fa-user-plus"></i>Sign up
-      </NavLink>
+   
+      <NavLink to="/signup" className={styles.NavLink} activeClassName={styles.Active}>
+  <i className={`fas fa-user-plus ${styles.navBarIcons}`}></i>Sign up
+</NavLink>
+
     </>
   );
 
@@ -143,6 +130,7 @@ const NavBar = () => {
             </NavLink>
             {currentUser ? loggedInIcons : loggedOutIcons}
           </Nav>
+          
         </Navbar.Collapse>
       </Container>
     </Navbar>

@@ -81,7 +81,7 @@ const BeatFeedbackForm = ({ beatId }) => {
           <span>{feedbackCounts.loop}</span>
         </span>
         
-          <button type="submit" className={appStyles.submitButton}> feedback</button>
+          <button type="submit" className={appStyles.submitButton}> submit feedback</button>
       </form>
     </div>
   );

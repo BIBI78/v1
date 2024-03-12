@@ -81,6 +81,7 @@ far.fa.heart{
 .iconFire{
     color:red;
 }
+
 .iconFire:hover {
     /* color: grey; */
     color: red;
@@ -125,4 +126,9 @@ far.fa.heart{
     /* color: grey; */
     color: red;
     font-size: 5.9rem;
+}
+
+.NavLink:hover {
+    padding: 5px;
+    color: red;
 }

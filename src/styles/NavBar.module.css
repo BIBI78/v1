@@ -5,10 +5,34 @@
     font-weight: 400;
 }
 
+
 .NavLink {
     padding: 5px;
+    
+
+}
+
+.NavLink:hover {
+    padding: 5px;
+    color: red;
+}
+
+
+.NavBar:hover {
+    
+    color: red;
 }
 
 .Active i {
     color: red;
+}
+
+.navBarIcons{
+    padding: 5x;
+}
+.navBarIcons:hover{
+    color: red;
+    padding: 5px;
+
+
 }

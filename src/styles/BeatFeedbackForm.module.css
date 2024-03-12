@@ -69,7 +69,8 @@ span {
             /* padding: 10px 20px; */
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            /* transition: background-color 0.3s; */
+            font-weight: 700;
         
 
 }
@@ -77,8 +78,8 @@ span {
 
 .submitButton:hover {
     color: red;
-    font-weight: 800;
-    font-size: 2.9rem;
+    font-weight: 700;
+    font-size: 1.9rem;
     /* Adjust hover background color as needed */
 }
 
