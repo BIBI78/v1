@@ -13,6 +13,7 @@ const BeatFeedbackForm = ({ beatId }) => {
     loop: false,
   });
 
+  
   const [feedbackCounts, setFeedbackCounts] = useState({
     fire: 0,
     cold: 0,
