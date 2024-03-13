@@ -36,7 +36,8 @@ const BeatFeedbackForm = ({ beatId }) => {
 
 
       const { data } = await axios.post("/feedback/", formData);
-      history.push(`/beats/${data.id}`);
+      // PROBLEM HERE !!! 
+      // history.push(`/beats/${data.id}`);
       
     } catch (err) {
       console.log(err);
