@@ -175,6 +175,7 @@ const Beat = (props) => {
                   </OverlayTrigger>
                   
           )}
+          {/* likes count here  */}
           {likes_count}
           <Link to={`/beats/${id}`}>
             <i className={`far fa-comments ${styles.Comment}`}  />
