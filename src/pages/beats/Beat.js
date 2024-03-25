@@ -11,7 +11,9 @@ import musicImage from "../../assets/music.jpg";
 import star from "../../styles/Star.module.css";
 import { Rating } from "react-simple-star-rating";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
-import BeatFeedbackForm from "./BeatFeedbackForm"; // Import BeatFeedbackForm component
+
+//  trying something new 
+import FireFeedbackButton from "../../components/FireFeedbackButton";
 
 
 const Beat = (props) => {
@@ -29,7 +31,9 @@ const Beat = (props) => {
     beatPage,
     setBeats,
     mp3,
-    mp3_url
+    mp3_url,
+    // fire_id,
+    // fire_count,
   } = props;
 
   const currentUser = useCurrentUser();
@@ -201,10 +205,17 @@ const Beat = (props) => {
             "Loading rating..."
           )}
         </span>
-        <span className="float-left" >
-        {/* Render BeatFeedbackForm component */}
+        <div>
+      {/* Other beat content */}
+      <FireFeedbackButton beat={id} />
+      {/* Render other feedback buttons here */}
+    </div>
+  {/* Render BeatFeedbackForm component */}
+        {/* <span className="float-left" >
+        
           <BeatFeedbackForm beatId={id} />
-          </span>
+        </span>
+         */}
       </Card.Body>
     </Card>
   );
