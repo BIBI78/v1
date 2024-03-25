@@ -13,7 +13,9 @@ import { Rating } from "react-simple-star-rating";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 
 //  trying something new 
+// eslint-disable-next-line
 import FireFeedbackButton from "../../components/FireFeedbackButton";
+import ColdFeedbackButton from "../../components/ColdFeedbackButton";
 
 
 const Beat = (props) => {
@@ -207,7 +209,8 @@ const Beat = (props) => {
         </span>
         <div>
       {/* Other beat content */}
-      <FireFeedbackButton beat={id} />
+          {/* <FireFeedbackButton beat={id} /> */}
+          <ColdFeedbackButton beat={id} />
       {/* Render other feedback buttons here */}
     </div>
   {/* Render BeatFeedbackForm component */}
