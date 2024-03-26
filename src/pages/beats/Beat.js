@@ -57,6 +57,7 @@ const Beat = (props) => {
       console.log(err);
     }
   };
+  
 
   const handleLike = async () => {
     try {
