@@ -11,11 +11,11 @@ import musicImage from "../../assets/music.jpg";
 import star from "../../styles/Star.module.css";
 import { Rating } from "react-simple-star-rating";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
+import ColdFeedbackButton from "../../components/ColdFeedbackButton"; // Import the ColdFeedbackButton component
 
 //  trying something new 
 // eslint-disable-next-line
-import FireFeedbackButton from "../../components/FireFeedbackButton";
-import ColdFeedbackButton from "../../components/ColdFeedbackButton";
+
 
 
 const Beat = (props) => {
@@ -34,8 +34,8 @@ const Beat = (props) => {
     setBeats,
     mp3,
     mp3_url,
-    // fire_id,
-    // fire_count,
+    cold_id,
+    cold_count,
   } = props;
 
   const currentUser = useCurrentUser();
@@ -57,172 +57,226 @@ const Beat = (props) => {
       console.log(err);
     }
   };
+
+  // cold feedback button
   
-
-  const handleLike = async () => {
+  const handleColdFeedbackLike = async () => {
     try {
-      const { data } = await axiosRes.post("/likes/", { beat: id });
+      const { data } = await axiosReq.post("/feedback/cold/", { beat: id });
       setBeats((prevBeats) => ({
         ...prevBeats,
-        results: prevBeats.results.map((beat) => {
-          return beat.id === id
-            ? { ...beat, likes_count: beat.likes_count + 1, like_id: data.id }
-            : beat;
-        }),
+        results: prevBeats.results.map((beatItem) =>
+          beatItem.id === id
+            ? { ...beatItem, cold_count: beatItem.cold_count + 1, cold_id: data.id }
+            : beatItem
+        ),
       }));
     } catch (err) {
-      console.log(err);
+      console.log("Error submitting cold feedback:", err);
     }
   };
 
-  const handleUnlike = async () => {
+  const handleColdFeedbackUnlike = async () => {
     try {
-      await axiosRes.delete(`/likes/${like_id}/`);
+      await axiosRes.delete(`/feedback/cold/${cold_id}/`);
       setBeats((prevBeats) => ({
         ...prevBeats,
-        results: prevBeats.results.map((beat) => {
-          return beat.id === id
-            ? { ...beat, likes_count: beat.likes_count - 1, like_id: null }
-            : beat;
-        }),
+        results: prevBeats.results.map((beatItem) =>
+          beatItem.id === id
+            ? { ...beatItem, cold_count: beatItem.cold_count - 1, cold_id: null }
+            : beatItem
+        ),
       }));
     } catch (err) {
-      console.log(err);
+      console.log("Error undoing cold feedback:", err);
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
+
+    const handleLike = async () => {
       try {
-        const [{ data: ratingsData }] = await Promise.all([
-          axiosReq.get(`/rating/`),
-        ]);
-
-        const ratingsForBeat = ratingsData.results.filter(
-          (rating) => rating.beat === parseInt(id)
-        );
-        const totalRatings = ratingsForBeat.reduce(
-          (acc, rating) => acc + rating.rating,
-          0
-        );
-        const averageRating = ratingsForBeat.length
-          ? totalRatings / ratingsForBeat.length
-          : 0;
-
-        setAverageRating(averageRating);
-        setHasLoaded(true);
+        const { data } = await axiosRes.post("/likes/", { beat: id });
+        setBeats((prevBeats) => ({
+          ...prevBeats,
+          results: prevBeats.results.map((beat) => {
+            return beat.id === id
+              ? { ...beat, likes_count: beat.likes_count + 1, like_id: data.id }
+              : beat;
+          }),
+        }));
       } catch (err) {
         console.log(err);
       }
     };
 
-    setHasLoaded(false);
-    const timer = setTimeout(() => {
-      fetchData();
+    const handleUnlike = async () => {
+      try {
+        await axiosRes.delete(`/likes/${like_id}/`);
+        setBeats((prevBeats) => ({
+          ...prevBeats,
+          results: prevBeats.results.map((beat) => {
+            return beat.id === id
+              ? { ...beat, likes_count: beat.likes_count - 1, like_id: null }
+              : beat;
+          }),
+        }));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const [{ data: ratingsData }] = await Promise.all([
+            axiosReq.get(`/rating/`),
+          ]);
+
+          const ratingsForBeat = ratingsData.results.filter(
+            (rating) => rating.beat === parseInt(id)
+          );
+          const totalRatings = ratingsForBeat.reduce(
+            (acc, rating) => acc + rating.rating,
+            0
+          );
+          const averageRating = ratingsForBeat.length
+            ? totalRatings / ratingsForBeat.length
+            : 0;
+
+          setAverageRating(averageRating);
+          setHasLoaded(true);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      setHasLoaded(false);
+      const timer = setTimeout(() => {
+        fetchData();
+      }, [id]);
+
+      return () => clearTimeout(timer);
     }, [id]);
-
-    return () => clearTimeout(timer);
-  }, [id]);
-
-  return (
-    <Card className={styles.Beat}>
-      <Card.Body>
-        <Media className="align-items-center justify-content-between">
-          <Link to={`/profiles/${profile_id}`}>
-            <Avatar src={profile_image} height={55} />
-            {owner}
-          </Link>
-          <div className="d-flex align-items-center">
-            <span>{updated_at}</span>
-            {is_owner && beatPage && (
-              <MoreDropdown
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-              />
-            )}
-          </div>
-        </Media>
-      </Card.Body>
-      <Link to={`/beats/${id}`}>
-        <Card.Img src={musicImage} alt={title} />
-        {mp3 && (
-          <audio controls className={styles.Audio}>
-            <source src={mp3_url} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
+  // cold feedback button 2
+  const ColdFeedbackButton = ({ beat, cold_id, cold_count }) => {
+    return (
+      <div className={styles.ColdFeedbackButton}>
+        {cold_id ? (
+          <span onClick={handleColdFeedbackUnlike}>
+            <i className={`fas fa-snowflake ${styles.Cold}`} />
+          </span>
+        ) : (
+          <span onClick={handleColdFeedbackLike}>
+            <i className={`far fa-snowflake ${styles.ColdOutline}`} />
+          </span>
         )}
-      </Link>
+        <span>{cold_count}</span>
+      </div>
+    );
+  };
 
-      <Card.Body>
-        {title && <Card.Title className="text-center">{title}</Card.Title>}
-        {content && <Card.Text>{content}</Card.Text>}
-        <div className={styles.beatBar}>
-          {is_owner ? (
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>You can't like your own beat!</Tooltip>}
-            >
-              
-              <i className="far fa-heart" />
-            </OverlayTrigger>
-          ) : like_id ? (
-            <span onClick={handleUnlike}>
-              <i className={`far fa-heart ${styles.Heart}`} />
-            </span>
-          ) : currentUser ? (
-            <span onClick={handleLike}>
-              <i className={`far fa-heart ${styles.HeartOutline}`} />
-            </span>
-          ) : (
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>Log in to like beats!</Tooltip>}
-            >
-              <i className="far fa-heart" />
-                  </OverlayTrigger>
-                  
+    return (
+      <Card className={styles.Beat}>
+        <Card.Body>
+          <Media className="align-items-center justify-content-between">
+            <Link to={`/profiles/${profile_id}`}>
+              <Avatar src={profile_image} height={55} />
+              {owner}
+            </Link>
+            <div className="d-flex align-items-center">
+              <span>{updated_at}</span>
+              {is_owner && beatPage && (
+                <MoreDropdown
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
+                />
+              )}
+            </div>
+          </Media>
+        </Card.Body>
+        <Link to={`/beats/${id}`}>
+          <Card.Img src={musicImage} alt={title} />
+          {mp3 && (
+            <audio controls className={styles.Audio}>
+              <source src={mp3_url} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
           )}
-          {/* likes count here  */}
-          {likes_count}
-          <Link to={`/beats/${id}`}>
-            <i className={`far fa-comments ${styles.Comment}`}  />
-          </Link>
-          {comments_count}
+        </Link>
+
+        <Card.Body>
+          {title && <Card.Title className="text-center">{title}</Card.Title>}
+          {content && <Card.Text>{content}</Card.Text>}
+          <div className={styles.beatBar}>
+            {is_owner ? (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>You can't like your own beat!</Tooltip>}
+              >
+              
+                <i className="far fa-heart" />
+              </OverlayTrigger>
+            ) : like_id ? (
+              <span onClick={handleUnlike}>
+                <i className={`far fa-heart ${styles.Heart}`} />
+              </span>
+            ) : currentUser ? (
+              <span onClick={handleLike}>
+                <i className={`far fa-heart ${styles.HeartOutline}`} />
+              </span>
+            ) : (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Log in to like beats!</Tooltip>}
+              >
+                <i className="far fa-heart" />
+              </OverlayTrigger>
+                  
+            )}
+            {/* likes count here  */}
+            {likes_count}
+            <Link to={`/beats/${id}`}>
+              <i className={`far fa-comments ${styles.Comment}`} />
+            </Link>
+            {comments_count}
           </div>
         
-        <span className="float-right star.Star">
-          {hasLoaded ? (
-            <>
-              <Rating
-                className={star.Star}
-                readonly
-                initialValue={averageRating.toFixed(1)}
-                size={25}
+          <span className="float-right star.Star">
+            {hasLoaded ? (
+              <>
+                <Rating
+                  className={star.Star}
+                  readonly
+                  initialValue={averageRating.toFixed(1)}
+                  size={25}
                 // style={{ color: "#00ff00" }}
                 // COME BACK HERE
                 // fillColor="#00ff00"
-              />
-              {averageRating.toFixed(1)}
-            </>
-          ) : (
-            "Loading rating..."
-          )}
-        </span>
-        <div>
-      {/* Other beat content */}
-          {/* <FireFeedbackButton beat={id} /> */}
-          <ColdFeedbackButton beat={id} />
-      {/* Render other feedback buttons here */}
-    </div>
-  {/* Render BeatFeedbackForm component */}
-        {/* <span className="float-left" >
-        
-          <BeatFeedbackForm beatId={id} />
-        </span>
-         */}
-      </Card.Body>
-    </Card>
-  );
-};
+                />
+                {averageRating.toFixed(1)}
+              </>
+            ) : (
+              "Loading rating..."
+            )}
+          </span>
+          <div>
+    <ColdFeedbackButton
+        beat={id}
+        cold_id={cold_id}
+        cold_count={cold_count}
+    />
+    {/* Render other feedback buttons here */}
+</div>
+          <div>
+            {/* Other beat content */}
+            {/* <FireFeedbackButton beat={id} /> */}
+            <ColdFeedbackButton beat={id} />
+            {/* Render other feedback buttons here */}
+          </div>
+
+        </Card.Body>
+      </Card>
+    );
+  };
 
 export default Beat;
