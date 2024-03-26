@@ -158,6 +158,7 @@ const Beat = (props) => {
       return () => clearTimeout(timer);
     }, [id]);
   // cold feedback button 2
+
   const ColdFeedbackButton = ({ beat, cold_id, cold_count }) => {
     return (
       <div className={styles.ColdFeedbackButton}>
@@ -166,9 +167,11 @@ const Beat = (props) => {
             <i className={`fas fa-snowflake ${styles.Cold}`} />
           </span>
         ) : (
+        
           <span onClick={handleColdFeedbackLike}>
             <i className={`far fa-snowflake ${styles.ColdOutline}`} />
-          </span>
+            </span>
+            
         )}
         <span>{cold_count}</span>
       </div>
@@ -270,7 +273,7 @@ const Beat = (props) => {
           <div>
             {/* Other beat content */}
             {/* <FireFeedbackButton beat={id} /> */}
-            <ColdFeedbackButton beat={id} />
+            {/* <ColdFeedbackButton beat={id} /> */}
             {/* Render other feedback buttons here */}
           </div>
 
