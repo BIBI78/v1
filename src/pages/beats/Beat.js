@@ -11,7 +11,8 @@ import musicImage from "../../assets/music.jpg";
 import star from "../../styles/Star.module.css";
 import { Rating } from "react-simple-star-rating";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
-import ColdFeedbackButton from "../../components/ColdFeedbackButton"; // Import the ColdFeedbackButton component
+// import ColdFeedbackButton from "../../components/ColdFeedbackButton";
+// Import the ColdFeedbackButton component
 
 //  trying something new 
 // eslint-disable-next-line
@@ -36,6 +37,8 @@ const Beat = (props) => {
     mp3_url,
     cold_id,
     cold_count,
+    hard_id,
+    hard_count,
   } = props;
 
   const currentUser = useCurrentUser();
@@ -91,6 +94,41 @@ const Beat = (props) => {
       console.log("Error undoing cold feedback:", err);
     }
   };
+
+  // hard feedback button
+
+  const handleHardFeedbackLike = async () => {
+    try {
+      const { data } = await axiosReq.post("/feedback/hard/", { beat: id });
+      setBeats((prevBeats) => ({
+        ...prevBeats,
+        results: prevBeats.results.map((beatItem) =>
+          beatItem.id === id
+            ? { ...beatItem, hard_count: beatItem.hard_count + 1, hard_id: data.id }
+            : beatItem
+        ),
+      }));
+    } catch (err) {
+      console.log("Error submitting HARD feedback:", err);
+    }
+  };
+
+  const handleHardFeedbackUnlike = async () => {
+    try {
+      await axiosRes.delete(`/feedback/hard/${hard_id}/`);
+      setBeats((prevBeats) => ({
+        ...prevBeats,
+        results: prevBeats.results.map((beatItem) =>
+          beatItem.id === id
+            ? { ...beatItem, hard_count: beatItem.hard_count - 1, hard_id: null }
+            : beatItem
+        ),
+      }));
+    } catch (err) {
+      console.log("Error undoing HARD feedback:", err);
+    }
+  };
+      // 
 
 
     const handleLike = async () => {
@@ -177,6 +215,27 @@ const Beat = (props) => {
       </div>
     );
   };
+  // Hard button part 2
+  const HardFeedbackButton = ({ beat, hard_id, hard_count }) => {
+    return (
+      <div className={styles.HardFeedbackButton}>
+        {hard_id ? (
+          <span onClick={handleHardFeedbackUnlike}>
+           <i className={`fas fa-gavel ${styles.Hard}`} />
+
+          </span>
+        ) : (
+        
+          <span onClick={handleHardFeedbackLike}>
+            <i className={`fas fa-gavel ${styles.HardOutline}`} />
+            </span>
+            
+        )}
+        <span>{hard_count}</span>
+      </div>
+    );
+  };
+  // 
 
     return (
       <Card className={styles.Beat}>
@@ -267,9 +326,21 @@ const Beat = (props) => {
         beat={id}
         cold_id={cold_id}
         cold_count={cold_count}
-    />
+            />
+      <HardFeedbackButton
+        beat={id}
+        hard_id={hard_id}
+        hard_count={hard_count}
+            />
     {/* Render other feedback buttons here */}
-</div>
+          </div>
+          {/* <div>
+               <HardFeedbackButton
+        beat={id}
+        hard_id={hard_id}
+        hard_count={hard_count}
+            />
+          </div> */}
           <div>
             {/* Other beat content */}
             {/* <FireFeedbackButton beat={id} /> */}

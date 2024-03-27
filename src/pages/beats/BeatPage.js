@@ -51,7 +51,7 @@ function BeatPage() {
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         {/* CHANGE HERE MOST POPULAR BEATS */}
-        <p>Popular profiles for mobile</p>
+        <p>popular producers</p>
         <Beat {...beat.results[0]} setBeats={setBeat} beatPage />
         <Container className={appStyles.Content}>
           {currentUser ? (
