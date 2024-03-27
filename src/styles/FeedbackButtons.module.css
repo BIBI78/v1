@@ -1,0 +1,4 @@
+.FeedbackButtons {
+    display: flex;
+    justify-content: flex-end;
+}

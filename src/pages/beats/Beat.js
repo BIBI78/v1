@@ -11,11 +11,9 @@ import musicImage from "../../assets/music.jpg";
 import star from "../../styles/Star.module.css";
 import { Rating } from "react-simple-star-rating";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
-// import ColdFeedbackButton from "../../components/ColdFeedbackButton";
-// Import the ColdFeedbackButton component
+// 
 
-//  trying something new 
-// eslint-disable-next-line
+
 
 
 
@@ -302,6 +300,7 @@ const handleLoopFeedbackUnlike = async () => {
 
       return () => clearTimeout(timer);
     }, [id]);
+  
   // fire button 2
   const FireFeedbackButton = ({ beat, fire_id, fire_count }) => {
   return (
@@ -319,9 +318,7 @@ const handleLoopFeedbackUnlike = async () => {
     </div>
   );
 };
-
   // cold feedback button 2
-
   const ColdFeedbackButton = ({ beat, cold_id, cold_count }) => {
     return (
       <div className={styles.ColdFeedbackButton}>
@@ -360,7 +357,6 @@ const handleLoopFeedbackUnlike = async () => {
       </div>
     );
   };
-  // 
   // trash button 2 
   const TrashFeedbackButton = ({ beat, trash_id, trash_count }) => {
   return (
@@ -482,7 +478,18 @@ const LoopFeedbackButton = ({ beat, loop_id, loop_count }) => {
               "Loading rating..."
             )}
           </span>
-          <div>
+          {/* PROBLEM HERE */}
+<span className={styles.FeedbackButtons}>
+  <FireFeedbackButton beat={id} fire_id={fire_id} fire_count={fire_count} />
+  <ColdFeedbackButton beat={id} cold_id={cold_id} cold_count={cold_count} />
+  <HardFeedbackButton beat={id} hard_id={hard_id} hard_count={hard_count} />
+  <TrashFeedbackButton beat={id} trash_id={trash_id} trash_count={trash_count} />
+  <LoopFeedbackButton beat={id} loop_id={loop_id} loop_count={loop_count} />
+</span>
+
+
+
+          {/* <div>
      <FireFeedbackButton
         beat={id}
         fire_id={fire_id}
@@ -508,7 +515,7 @@ const LoopFeedbackButton = ({ beat, loop_id, loop_count }) => {
         loop_id={loop_id}
         loop_count={loop_count}
             />
-          </div>
+          </div> */}
 
         </Card.Body>
       </Card>
