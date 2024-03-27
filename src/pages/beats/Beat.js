@@ -39,6 +39,10 @@ const Beat = (props) => {
     cold_count,
     hard_id,
     hard_count,
+    trash_id,
+    trash_count,
+    loop_id,
+    loop_count,
   } = props;
 
   const currentUser = useCurrentUser();
@@ -128,7 +132,74 @@ const Beat = (props) => {
       console.log("Error undoing HARD feedback:", err);
     }
   };
-      // 
+  // 
+  // trash button 1
+  const handleTrashFeedbackLike = async () => {
+  try {
+    const { data } = await axiosReq.post("/feedback/trash/", { beat: id });
+    setBeats((prevBeats) => ({
+      ...prevBeats,
+      results: prevBeats.results.map((beatItem) =>
+        beatItem.id === id
+          ? { ...beatItem, trash_count: beatItem.trash_count + 1, trash_id: data.id }
+          : beatItem
+      ),
+    }));
+  } catch (err) {
+    console.log("Error submitting TRASH feedback:", err);
+  }
+};
+
+const handleTrashFeedbackUnlike = async () => {
+  try {
+    await axiosRes.delete(`/feedback/trash/${trash_id}/`);
+    setBeats((prevBeats) => ({
+      ...prevBeats,
+      results: prevBeats.results.map((beatItem) =>
+        beatItem.id === id
+          ? { ...beatItem, trash_count: beatItem.trash_count - 1, trash_id: null }
+          : beatItem
+      ),
+    }));
+  } catch (err) {
+    console.log("Error undoing TRASH feedback:", err);
+  }
+};
+  
+  // loop button 1
+  const handleLoopFeedbackLike = async () => {
+  try {
+    const { data } = await axiosReq.post("/feedback/loop/", { beat: id });
+    setBeats((prevBeats) => ({
+      ...prevBeats,
+      results: prevBeats.results.map((beatItem) =>
+        beatItem.id === id
+          ? { ...beatItem, loop_count: beatItem.loop_count + 1, loop_id: data.id }
+          : beatItem
+      ),
+    }));
+  } catch (err) {
+    console.log("Error submitting LOOP feedback:", err);
+  }
+};
+
+const handleLoopFeedbackUnlike = async () => {
+  try {
+    await axiosRes.delete(`/feedback/loop/${loop_id}/`);
+    setBeats((prevBeats) => ({
+      ...prevBeats,
+      results: prevBeats.results.map((beatItem) =>
+        beatItem.id === id
+          ? { ...beatItem, loop_count: beatItem.loop_count - 1, loop_id: null }
+          : beatItem
+      ),
+    }));
+  } catch (err) {
+    console.log("Error undoing LOOP feedback:", err);
+  }
+};
+
+
 
 
     const handleLike = async () => {
@@ -236,6 +307,42 @@ const Beat = (props) => {
     );
   };
   // 
+  // trash button 2 
+  const TrashFeedbackButton = ({ beat, trash_id, trash_count }) => {
+  return (
+    <div className={styles.TrashFeedbackButton}>
+      {trash_id ? (
+        <span onClick={handleTrashFeedbackUnlike}>
+          <i className={`fas fa-trash ${styles.Trash}`} />
+        </span>
+      ) : (
+        <span onClick={handleTrashFeedbackLike}>
+          <i className={`fas fa-trash ${styles.TrashOutline}`} />
+        </span>
+      )}
+      <span>{trash_count}</span>
+    </div>
+  );
+  };
+  // loop button 2
+const LoopFeedbackButton = ({ beat, loop_id, loop_count }) => {
+  return (
+    <div className={styles.LoopFeedbackButton}>
+      {loop_id ? (
+        <span onClick={handleLoopFeedbackUnlike}>
+          <i className={`fas fa-redo ${styles.Loop}`} />
+        </span>
+      ) : (
+        <span onClick={handleLoopFeedbackLike}>
+          <i className={`fas fa-redo ${styles.LoopOutline}`} />
+        </span>
+      )}
+      <span>{loop_count}</span>
+    </div>
+  );
+};
+
+
 
     return (
       <Card className={styles.Beat}>
@@ -332,20 +439,16 @@ const Beat = (props) => {
         hard_id={hard_id}
         hard_count={hard_count}
             />
-    {/* Render other feedback buttons here */}
-          </div>
-          {/* <div>
-               <HardFeedbackButton
+      <TrashFeedbackButton
         beat={id}
-        hard_id={hard_id}
-        hard_count={hard_count}
+        trash_id={trash_id}
+        trash_count={trash_count}
             />
-          </div> */}
-          <div>
-            {/* Other beat content */}
-            {/* <FireFeedbackButton beat={id} /> */}
-            {/* <ColdFeedbackButton beat={id} /> */}
-            {/* Render other feedback buttons here */}
+       <LoopFeedbackButton
+        beat={id}
+        loop_id={loop_id}
+        loop_count={loop_count}
+            />
           </div>
 
         </Card.Body>
