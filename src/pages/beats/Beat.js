@@ -35,6 +35,8 @@ const Beat = (props) => {
     setBeats,
     mp3,
     mp3_url,
+    fire_id,
+    fire_count,
     cold_id,
     cold_count,
     hard_id,
@@ -64,6 +66,39 @@ const Beat = (props) => {
       console.log(err);
     }
   };
+  // fire feedback button 
+  const handleFireFeedbackLike = async () => {
+  try {
+    const { data } = await axiosReq.post("/feedback/fire/", { beat: id });
+    setBeats((prevBeats) => ({
+      ...prevBeats,
+      results: prevBeats.results.map((beatItem) =>
+        beatItem.id === id
+          ? { ...beatItem, fire_count: beatItem.fire_count + 1, fire_id: data.id }
+          : beatItem
+      ),
+    }));
+  } catch (err) {
+    console.log("Error submitting fire feedback:", err);
+  }
+};
+
+const handleFireFeedbackUnlike = async () => {
+  try {
+    await axiosRes.delete(`/feedback/fire/${fire_id}/`);
+    setBeats((prevBeats) => ({
+      ...prevBeats,
+      results: prevBeats.results.map((beatItem) =>
+        beatItem.id === id
+          ? { ...beatItem, fire_count: beatItem.fire_count - 1, fire_id: null }
+          : beatItem
+      ),
+    }));
+  } catch (err) {
+    console.log("Error undoing fire feedback:", err);
+  }
+};
+
 
   // cold feedback button
   
@@ -198,6 +233,7 @@ const handleLoopFeedbackUnlike = async () => {
     console.log("Error undoing LOOP feedback:", err);
   }
 };
+  //
 
 
 
@@ -266,6 +302,24 @@ const handleLoopFeedbackUnlike = async () => {
 
       return () => clearTimeout(timer);
     }, [id]);
+  // fire button 2
+  const FireFeedbackButton = ({ beat, fire_id, fire_count }) => {
+  return (
+    <div className={styles.FireFeedbackButton}>
+      {fire_id ? (
+        <span onClick={handleFireFeedbackUnlike}>
+          <i className={`fas fa-fire ${styles.Fire}`} />
+        </span>
+      ) : (
+        <span onClick={handleFireFeedbackLike}>
+          <i className={`far fa-fire ${styles.FireOutline}`} />
+        </span>
+      )}
+      <span>{fire_count}</span>
+    </div>
+  );
+};
+
   // cold feedback button 2
 
   const ColdFeedbackButton = ({ beat, cold_id, cold_count }) => {
@@ -429,6 +483,11 @@ const LoopFeedbackButton = ({ beat, loop_id, loop_count }) => {
             )}
           </span>
           <div>
+     <FireFeedbackButton
+        beat={id}
+        fire_id={fire_id}
+        fire_count={fire_count}
+            />
     <ColdFeedbackButton
         beat={id}
         cold_id={cold_id}
