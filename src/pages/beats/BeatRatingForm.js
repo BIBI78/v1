@@ -80,7 +80,7 @@ function BeatRatingForm(props) {
       // Get the filled icons container element
       const filledIcons = element.querySelector('.style-module_fillIcons__6---A');
       // Set the color of the filled icons to green
-      filledIcons.style.color = 'rgb(11 255 14)';
+      filledIcons.style.color = 'yellow';
     });
   }, []);
 

@@ -11,7 +11,7 @@ import musicImage from "../../assets/music.jpg";
 import star from "../../styles/Star.module.css";
 import { Rating } from "react-simple-star-rating";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
-// 
+import feedbackStyles from "../../styles/FeedbackButtons.module.css";
 
 
 
@@ -470,7 +470,7 @@ const LoopFeedbackButton = ({ beat, loop_id, loop_count }) => {
                   size={25}
                 // style={{ color: "#00ff00" }}
                 // COME BACK HERE
-                // fillColor="#00ff00"
+                fillColor="yellow"
                 />
                 {averageRating.toFixed(1)}
               </>
@@ -479,7 +479,7 @@ const LoopFeedbackButton = ({ beat, loop_id, loop_count }) => {
             )}
           </span>
           {/* PROBLEM HERE */}
-<span className={styles.FeedbackButtons}>
+<span className={feedbackStyles.FeedbackButtons}>
   <FireFeedbackButton beat={id} fire_id={fire_id} fire_count={fire_count} />
   <ColdFeedbackButton beat={id} cold_id={cold_id} cold_count={cold_count} />
   <HardFeedbackButton beat={id} hard_id={hard_id} hard_count={hard_count} />
